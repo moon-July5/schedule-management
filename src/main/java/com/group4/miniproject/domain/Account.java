@@ -32,6 +32,9 @@ public class Account extends AuditingFields{
     private String password;
 
     @Setter
+    private String accountId;
+
+    @Setter
     @Enumerated(EnumType.STRING)
     @ElementCollection(fetch = FetchType.EAGER)
     @Builder.Default
