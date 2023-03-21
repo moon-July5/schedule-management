@@ -30,4 +30,7 @@ public class Schedule extends AuditingFields {
     @Setter
     private ScheduleType type; // 연차, 당직
 
+    @Setter
+    private String content; // 일정 내용
+
 }

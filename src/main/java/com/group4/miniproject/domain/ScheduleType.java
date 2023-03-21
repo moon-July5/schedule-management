@@ -4,8 +4,9 @@ import lombok.Getter;
 
 @Getter
 public enum ScheduleType {
-    YEARLY("YEARLY"),
-    DUTY("DUTY");
+    YEARLY("YEARLY"), // 연차
+    DUTY("DUTY"), // 당직
+    PLAN("PLAN"); // 일정
 
     private final String type;
 
