@@ -24,6 +24,5 @@ public class AccountRequestDTO {
     private String accountId;
 
     private String email;
-    @Builder.Default
-    private Set<AccountRole> roles = new HashSet<>();
+
 }
