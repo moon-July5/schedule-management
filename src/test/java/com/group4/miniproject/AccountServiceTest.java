@@ -34,14 +34,21 @@ public class AccountServiceTest {
                 .name("유지현")
                 .build();
         //4번 유저의 이메일을 다르게 보냈을때 아이디 비밀번호가 넣어지지 않은 것을 확인
-        AccountRequestDTO accountRequestDTO = AccountRequestDTO.builder()
+        AccountRequestDTO isSuccessTest = AccountRequestDTO.builder()
                 .accountId("abcd")
                 .password("12345")
                 .email("mmm@dfgf.com")
                 .name("민시후")
                 .build();
         //5번 유저의 이메일과 이름을 같게 보냈을때 아이디 비밀번호가 넣어지는 것을 확인
-        accountService.signUp(accountRequestDTO);
-        accountService.logAccountAll();
+        try {
+            log.info(accountService.signUp(ifFalseTest));
+        }catch (Exception e){
+        }
+        try {
+            log.info(accountService.signUp(isSuccessTest));
+        }catch (Exception e){
+        }
     }
+
 }

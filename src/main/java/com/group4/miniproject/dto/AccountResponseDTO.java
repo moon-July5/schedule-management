@@ -19,31 +19,8 @@ public class AccountResponseDTO {
 
     private String name;
 
-    private String accountId;
-
-
-    @Builder.Default
-    private Set<AccountRole> roles = new HashSet<>();
-
-
-    private Set<Schedule> schedules = new LinkedHashSet<>();
-
-    @ToString.Exclude
-    private SuccessLogin successLogin;
-
     private String email;
 
     private String department;
 
-    private String position;
-
-    private Long yearly;
-
-    @Builder.Default
-    private Boolean duty = Boolean.FALSE;
-
-    private LocalDateTime deletedAt;
-
-    @Builder.Default
-    private Boolean isDeleted = Boolean.FALSE;
 }
