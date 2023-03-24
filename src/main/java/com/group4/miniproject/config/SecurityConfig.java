@@ -22,7 +22,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
         log.info("----------------configure-------------");
-// 로그인 페이ㅣ지
+
         return http.csrf().disable().build();
     }
 
