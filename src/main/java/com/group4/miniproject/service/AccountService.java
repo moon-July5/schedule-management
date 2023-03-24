@@ -12,8 +12,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -35,46 +35,64 @@ public class AccountService {
         return encrypt256.decryptAES256(account.getName());
     }
 
-
-    public AccountResponseDTO signUp(AccountRequestDTO accountRequestDTO) throws Exception {
+    public AccountResponseDTO SignUp(Long id, AccountRequestDTO accountRequestDTO) throws Exception {
         log.info("-----------------------signUpStart------------------------------");
-        String email = encrypt256.encryptAES256(accountRequestDTO.getEmail());
-        String name = encrypt256.encryptAES256(accountRequestDTO.getName());
         String accountId = encrypt256.encryptAES256(accountRequestDTO.getAccountId());
         String password = passwordEncoder.encode(accountRequestDTO.getPassword());
-        log.info("-----------------------Id Unique Check---------------------------");
-        if(accountRepository.findByAccountId(accountId)!=null){
-            log.info("이미 있는 ID 입니다");
-            throw new IllegalStateException("이미 있는 ID 입니다");
-        }
-        log.info("-----------------------Id Unique Check Finish---------------------------");
-
-        List<Account> account = accountRepository.findByName(name);
-        for (Account i :account ) {
-            if(i.getEmail().equals(email)){
-                if(i.getAccountId()!= null){
-                    log.info("가입된 아이디가 있습니다.");
-                    throw new IllegalStateException("가입된 아이디가 있습니다.");
-                }
-                i.setAccountId(accountId);
-                i.setPassword(password);
-                log.info("-----------------------signUp ------------------------------");
-                log.info(i.toString());
-
-                AccountResponseDTO accountResponseDTO = AccountResponseDTO.builder()
-                        .department(encrypt256.decryptAES256(i.getDepartment()))
-                        .email(encrypt256.decryptAES256(i.getEmail()))
-                        .name(encrypt256.decryptAES256(i.getName()))
-                        .build();
-                log.info("회원가입 성공");
-                return accountResponseDTO;
-            }
-        }
+        Optional<Account> account= accountRepository.findById(id);
+        account.get().setAccountId(accountId);
+        account.get().setPassword(password);
+        AccountResponseDTO accountResponseDTO = AccountResponseDTO.builder()
+                .department(encrypt256.decryptAES256(account.get().getDepartment()))
+                .email(encrypt256.decryptAES256(account.get().getEmail()))
+                .name(encrypt256.decryptAES256(account.get().getName()))
+                .build();
         log.info("-----------------------signUpFinish------------------------------");
-        log.info("이름과 이메일이 정확한지 확인해 주세요");
-        throw new IllegalStateException("이름과 이메일이 정확한지 확인해 주세요");
-        //예외처리 어디서 할지 고민 아이디가 이미 있는 경우 저장x 추가 해야됨
-        //사용중인 아이디 일경우 예외처리
+        return accountResponseDTO;
     }
 
+    public void IdUniqueCheck(String accountId) throws Exception {
+        log.info("-----------------------Id Unique Check---------------------------");
+        List<Account> accountList =accountRepository.findByAccountId(encrypt256.encryptAES256(accountId));
+        if(!accountList.isEmpty()){
+            log.info("이미 있는 ID 입니다");
+            throw new IllegalArgumentException("이미 있는 ID 입니다");
+        }
+        log.info("---------------------------Success---------------------------");
+        log.info("-----------------------Id Unique Check Finish---------------------------");
+    }
+    public void NameCheck(String name) throws Exception {
+        log.info("-----------------------Name Check ---------------------------------");
+        List<Account> accountList = accountRepository.findByName(encrypt256.encryptAES256(name));
+        if(accountList.isEmpty()){
+            log.info("일치하는 이름이 없습니다.");
+            throw new IllegalArgumentException("일치하는 이름이 없습니다.");
+        }
+        log.info("---------------------------Success---------------------------");
+        log.info("-----------------------Name Check Finish---------------------------");
+    }
+    public Long EmailCheck(String name, String email) throws Exception {
+        log.info("-----------------------Email Check ---------------------------------");
+        List<Account> accountList = accountRepository.findByName(encrypt256.encryptAES256(name));
+        for (Account i :accountList ) {
+            if(i.getEmail().equals(encrypt256.encryptAES256(email))){
+                log.info("---------------------------Success---------------------------");
+                log.info("-----------------------Email Check Finish ---------------------------------");
+                return i.getId();
+            }
+        }
+        log.info("일치하는 이메일이 없습니다.");
+        log.info("-----------------------Email Check Finish ---------------------------------");
+        throw new IllegalArgumentException("일치하는 이메일이 없습니다.");
+    }
+    public void AlreadySignUpCheck(Long id) throws Exception {
+        Optional<Account> account= accountRepository.findById(id);
+        log.info("-----------------------Check Already SignUp------------------------------");
+        if(account.get().getAccountId()!=null){
+            log.info("가입된 아이디가 있습니다.");
+            throw new IllegalArgumentException("가입된 아이디가 있습니다.");
+        }
+        log.info("---------------------------Success---------------------------");
+        log.info("-----------------------Check Already SignUp Finish------------------------------");
+    }
 }

@@ -1,5 +1,6 @@
 package com.group4.miniproject.controller;
 
+import com.group4.miniproject.annotation.BindingCheck;
 import com.group4.miniproject.dto.AccountRequestDTO;
 import com.group4.miniproject.dto.AccountResponseDTO;
 import com.group4.miniproject.service.AccountService;
@@ -22,20 +23,16 @@ import org.springframework.web.bind.annotation.RestController;
 public class AccountController {
     private final AccountService accountService;
 
+    @BindingCheck
     @PostMapping("/signup")
     public ResponseEntity signup(@RequestBody @Valid AccountRequestDTO accountRequestDTO,
                          BindingResult bindingResult,Model model) throws Exception {
-        if(bindingResult.hasErrors()){
-            log.info("has error.......");
-            return ResponseEntity.status(400).body(bindingResult.getAllErrors());
-        }
-        try {
-            AccountResponseDTO result = accountService.signUp(accountRequestDTO);
+            accountService.IdUniqueCheck(accountRequestDTO.getAccountId());
+            accountService.NameCheck(accountRequestDTO.getName());
+            Long id =accountService.EmailCheck(accountRequestDTO.getName(),accountRequestDTO.getEmail());
+            accountService.AlreadySignUpCheck(id);
+            AccountResponseDTO result= accountService.SignUp(id,accountRequestDTO);
             return ResponseEntity.ok(result);
-        }catch (Exception e){
-            return ResponseEntity.status(400).body(e.getMessage());
-        }
-
     }
 
 }
