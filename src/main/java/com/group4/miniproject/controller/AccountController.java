@@ -25,14 +25,14 @@ public class AccountController {
 
     @BindingCheck
     @PostMapping("/signup")
-    public ResponseEntity signup(@RequestBody @Valid AccountRequestDTO accountRequestDTO,
-                         BindingResult bindingResult,Model model) throws Exception {
+    public ResponseEntity<?> signup(@RequestBody @Valid AccountRequestDTO accountRequestDTO,
+                         BindingResult bindingResult) throws Exception {
             accountService.IdUniqueCheck(accountRequestDTO.getAccountId());
             accountService.NameCheck(accountRequestDTO.getName());
             Long id =accountService.EmailCheck(accountRequestDTO.getName(),accountRequestDTO.getEmail());
             accountService.AlreadySignUpCheck(id);
             AccountResponseDTO result= accountService.SignUp(id,accountRequestDTO);
-            return ResponseEntity.ok(result);
+            return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
 }
