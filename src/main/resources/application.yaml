@@ -22,4 +22,10 @@ spring:
 
     sql:
         init:
-            mode: always
+            mode: never
+
+jwt:
+    token:
+        access-token-secret-key: aG91Mjctc2ltcGxlLXNwcmluZy1ib290LWFwaS1qd3QK
+        #        1800초 : 30분
+        access-token-expire-length: 1800000

@@ -41,15 +41,15 @@ public class AccountService {
         String name = encrypt256.encryptAES256(accountRequestDTO.getName());
         String accountId = encrypt256.encryptAES256(accountRequestDTO.getAccountId());
         String password = passwordEncoder.encode(accountRequestDTO.getPassword());
-        List<Account> account = accountRepository.findByName(name);
-        for (Account i :account ) {
-            if(i.getEmail().equals(email)){
-                i.setAccountId(accountId);
-                i.setPassword(password);
-                log.info("-----------------------signUp ------------------------------");
-                log.info(i.toString());
-            }
-        }
+//        List<Account> account = accountRepository.findByName(name);
+//        for (Account i :account ) {
+//            if(i.getEmail().equals(email)){
+//                i.setAccountId(accountId);
+//                i.setPassword(password);
+//                log.info("-----------------------signUp ------------------------------");
+//                log.info(i.toString());
+//            }
+//        }
         log.info("-----------------------signUpFinish------------------------------");
         //예외처리 어디서 할지 고민 아이디가 이미 있는 경우 저장x 추가 해야됨
         //사용중인 아이디 일경우 예외처리
