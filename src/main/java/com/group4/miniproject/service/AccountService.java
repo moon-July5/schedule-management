@@ -2,6 +2,8 @@ package com.group4.miniproject.service;
 
 import com.group4.miniproject.domain.Account;
 import com.group4.miniproject.dto.AccountRequestDTO;
+import com.group4.miniproject.dto.AccountResponseDTO;
+
 import com.group4.miniproject.encrypt256.Encrypt256;
 import com.group4.miniproject.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
@@ -34,7 +36,6 @@ public class AccountService {
         return encrypt256.decryptAES256(account.getName());
     }
 
-
     public void signUp(AccountRequestDTO accountRequestDTO) throws Exception {
         log.info("-----------------------signUpStart------------------------------");
         String email = encrypt256.encryptAES256(accountRequestDTO.getEmail());
@@ -61,5 +62,4 @@ public class AccountService {
         }
             //테스트에 사용하기 위해서 만듬
         }
-
 }
