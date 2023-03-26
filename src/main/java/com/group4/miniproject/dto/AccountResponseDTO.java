@@ -11,16 +11,15 @@ import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
+
 @ToString
 @Getter
 @Builder
 public class AccountResponseDTO {
-
 
     private String name;
 
     private String email;
 
     private String department;
-
 }
