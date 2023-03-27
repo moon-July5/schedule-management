@@ -1,6 +1,7 @@
 package com.group4.miniproject.controller;
 
 import com.group4.miniproject.annotation.BindingCheck;
+import com.group4.miniproject.dto.AccountLoginRequestDto;
 import com.group4.miniproject.dto.AccountRequestDTO;
 import com.group4.miniproject.dto.ResponseDto;
 import com.group4.miniproject.service.AccountService;
@@ -9,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,7 +31,7 @@ public class AccountController {
 
     @BindingCheck
     @PostMapping("/login")
-    public ResponseEntity<ResponseDto> signIn(@RequestBody @Valid AccountRequestDTO accountRequestDTO,
+    public ResponseEntity<ResponseDto> signIn(@RequestBody @Valid AccountLoginRequestDto accountRequestDTO,
                                               BindingResult bindingResult) {
         return accountService.signIn(accountRequestDTO);
     }

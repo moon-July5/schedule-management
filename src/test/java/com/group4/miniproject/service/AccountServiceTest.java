@@ -1,6 +1,11 @@
 package com.group4.miniproject.service;
 
+import com.group4.miniproject.domain.Account;
 import com.group4.miniproject.dto.AccountRequestDTO;
+import com.group4.miniproject.dto.PrincipalDto;
+import com.group4.miniproject.encrypt256.Encrypt256;
+import com.group4.miniproject.exception.UserNotFoundException;
+import com.group4.miniproject.repository.AccountRepository;
 import com.group4.miniproject.service.AccountService;
 import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Test;
@@ -15,7 +20,12 @@ public class AccountServiceTest {
     @Autowired
     private AccountService accountService;
     @Autowired
+    private AccountRepository accountRepository;
+
+    @Autowired
     private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
+    private Encrypt256 encrypt256 = new Encrypt256();
 
     @Test
     public void register() throws Exception {
@@ -25,6 +35,7 @@ public class AccountServiceTest {
         String name4= accountService.register("유지현","yuu@axd.com","회계","사원");
         String name5= accountService.register("민시후","mmm@dfgf.com","인사","사원");
     }
+
     @Test
     public void signUp() throws Exception {
         AccountRequestDTO ifFalseTest = AccountRequestDTO.builder()
@@ -43,4 +54,19 @@ public class AccountServiceTest {
         //5번 유저의 이메일과 이름을 같게 보냈을때 아이디 비밀번호가 넣어지는 것을 확인
         //accountService.signUp(accountRequestDTO);
     }
+
+    @Test
+    public void setPasswordEncoderTest() {
+        String enPw = passwordEncoder.encode("12345678");
+        System.out.println("enPw = " + enPw);
+    }
+
+    @Test
+    public void findByAccountIdTest1() throws Exception {
+        Account account = accountRepository.findByAccountId(encrypt256.encryptAES256("admin"))
+                .orElseThrow(() -> new UserNotFoundException("데이터베이스에서 찾을 수 없습니다."));
+
+        System.out.println("account = " + account.toString());
+    }
+
 }

@@ -1,7 +1,9 @@
 package com.group4.miniproject.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.group4.miniproject.config.SecurityConfig;
+import com.group4.miniproject.dto.AccountLoginRequestDto;
 import com.group4.miniproject.dto.AccountRequestDTO;
 
 import lombok.extern.log4j.Log4j2;
@@ -59,6 +61,20 @@ public class AccountControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(accountRequestDTO)))
                 .andExpect(status().is4xxClientError())
+                .andDo(print());
+    }
+
+    @DisplayName("로그인 성공")
+    @Test
+    public void LoginTest() throws Exception {
+        AccountLoginRequestDto accountLoginRequestDto = AccountLoginRequestDto.builder()
+                .accountId("admin")
+                .password("12345678")
+                .build();
+
+        mvc.perform(post("/login")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(accountLoginRequestDto)))
                 .andDo(print());
     }
 

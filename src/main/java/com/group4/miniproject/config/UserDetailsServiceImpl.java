@@ -3,6 +3,7 @@ package com.group4.miniproject.config;
 import com.group4.miniproject.domain.Account;
 import com.group4.miniproject.domain.AccountRole;
 import com.group4.miniproject.dto.PrincipalDto;
+import com.group4.miniproject.encrypt256.Encrypt256;
 import com.group4.miniproject.exception.UserNotFoundException;
 import com.group4.miniproject.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +22,7 @@ import java.util.Set;
 public class UserDetailsServiceImpl implements UserDetailsService {
 
   private final AccountRepository accountRepository;
-
+  private Encrypt256 encrypt256 = new Encrypt256();
 
   /**
    * UserDetailsService 의 loadUserByUsername method를 구현하는데 이는 Database에 접근해서 사용자 정보를 가져오는 역할을 한다.
@@ -31,7 +32,13 @@ public class UserDetailsServiceImpl implements UserDetailsService {
   @Override
   public UserDetails loadUserByUsername(String accountId) throws UserNotFoundException {
     System.out.println("name in loadUserByUsername = " + accountId);
-    Account account = accountRepository.findByName(accountId).orElseThrow(() -> new UserNotFoundException(accountId + " -> 데이터베이스에서 찾을 수 없습니다.")); // db에서 유저조회
+    Account account = null; // db에서 유저조회
+    try {
+      account = accountRepository.findByAccountId(encrypt256.encryptAES256(accountId))
+              .orElseThrow(() -> new UserNotFoundException(accountId + " -> 데이터베이스에서 찾을 수 없습니다."));
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
 
     // role셋팅
     Set<GrantedAuthority> grantedAuthorities = new HashSet<>();

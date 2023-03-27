@@ -2,6 +2,7 @@ package com.group4.miniproject.service;
 
 import com.group4.miniproject.domain.Account;
 import com.group4.miniproject.domain.SuccessLogin;
+import com.group4.miniproject.dto.AccountLoginRequestDto;
 import com.group4.miniproject.dto.AccountRequestDTO;
 import com.group4.miniproject.dto.AccountResponseDTO;
 import com.group4.miniproject.dto.ResponseDto;
@@ -47,14 +48,24 @@ public class AccountService {
       throw new IllegalArgumentException("일치하는 이름이 없습니다.");
     }
     if(accountRepository.existsByAccountId(encrypt256.encryptAES256(accountRequestDTO.getAccountId()))) {
-      throw new IllegalArgumentException("이미 존재하고 있는 ID 입니다");
+      throw new IllegalArgumentException("이미 존재하고 있는 아이디 입니다");
     }
 
+    // pk 추출
     Long id = accountRepository.findByEmail(encrypt256.encryptAES256(accountRequestDTO.getEmail())).get().getId();
+
+    // 사용자 조회
+    Optional<Account> account= accountRepository.findById(id);
+
+    // 이미 존재하고 있는 아이디인지 확인
+    if(account.get().getAccountId()!=null){
+      throw new IllegalArgumentException("가입된 아이디가 있습니다.");
+    }
 
     String accountId = encrypt256.encryptAES256(accountRequestDTO.getAccountId());
     String password = passwordEncoder.encode(accountRequestDTO.getPassword());
-    Optional<Account> account= accountRepository.findById(id);
+
+
     account.get().setAccountId(accountId);
     account.get().setPassword(password);
     AccountResponseDTO accountResponseDTO = AccountResponseDTO.builder()
@@ -72,7 +83,7 @@ public class AccountService {
    * @param accountRequestDTO 유저의 이메일과 비밀번호
    * @return json web token
    */
-  public ResponseEntity<ResponseDto> signIn(AccountRequestDTO accountRequestDTO) {
+  public ResponseEntity<ResponseDto> signIn(AccountLoginRequestDto accountRequestDTO) {
     try {
 //      Authentication authentication = authenticationManager.authenticate(
 //          new UsernamePasswordAuthenticationToken(
@@ -82,17 +93,23 @@ public class AccountService {
 //      );
       Authentication authentication = authenticationManager.authenticate(
               new UsernamePasswordAuthenticationToken(
-                      accountRequestDTO.getName(),
+                      accountRequestDTO.getAccountId(),
                       accountRequestDTO.getPassword()
               )
       );
 
       // 로그인성공 시 마지막 로그 db에 이력 저장(account_id가 있으면 업데이트)
-      Account account = accountRepository.findByName(accountRequestDTO.getName()).get();
+      Account account = accountRepository.findByAccountId(encrypt256.encryptAES256(accountRequestDTO.getAccountId()))
+              .get();
+
       Optional<SuccessLogin> successLoginOptional = successLoginRepository.findByAccount(account);
       SuccessLogin successLogin = null;
       if( !successLoginOptional.isPresent() ) { // 기존에 이력이 없는 경우, 신규 생성
-        successLogin = SuccessLogin.builder().account(account).lastSuccessTime(LocalDateTime.now()).userAgent(HttpReqRespUtils.getUserAgent()).clientIp(HttpReqRespUtils.getClientIpAddressIfServletRequestExist()).build();
+        successLogin = SuccessLogin.builder().account(account).lastSuccessTime(LocalDateTime.now())
+                .userAgent(HttpReqRespUtils.getUserAgent())
+                .clientIp(HttpReqRespUtils.getClientIpAddressIfServletRequestExist())
+                .build();
+
       } else { // 기존에 이력이 있는 경우, update처리
         successLogin = successLoginOptional.get();
         successLogin.setLastSuccessTime(LocalDateTime.now());
@@ -101,15 +118,18 @@ public class AccountService {
       }
       successLoginRepository.save(successLogin);
 
-      System.out.println("accountRequestDTO.getName()" + accountRequestDTO.getName());
+      System.out.println("accountRequestDTO.getAccountId()" + accountRequestDTO.getAccountId());
       String token = jwtTokenProvider.generateAccessToken(authentication); // 토큰생성
       return new ResponseEntity<>(new ResponseDto("success", token), HttpStatus.OK);
 
     } catch (AuthenticationException e) {
       return new ResponseEntity<>(new ResponseDto("fail", "Invalid credentials supplied"), HttpStatus.OK);
+    } catch (Exception e) {
+      throw new RuntimeException(e);
     }
   }
 
+  // 테스트 용
   public String register(String name, String email,String department, String position) throws Exception {
     Account account = Account.builder()
             .name(encrypt256.encryptAES256(name))

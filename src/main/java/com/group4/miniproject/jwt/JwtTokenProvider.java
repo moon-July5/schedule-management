@@ -1,5 +1,6 @@
 package com.group4.miniproject.jwt;
 
+import com.group4.miniproject.dto.PrincipalDto;
 import com.group4.miniproject.exception.CustomException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
@@ -37,6 +38,7 @@ public class JwtTokenProvider {
    */
   public String generateAccessToken(Authentication authentication) {
     Claims claims = Jwts.claims().setSubject(authentication.getName());
+    //PrincipalDto principalDto = (PrincipalDto) authentication.getPrincipal();
 //    claims.put("auth", appUserRoles.stream().map(s -> new SimpleGrantedAuthority(s.getAuthority())).filter(Objects::nonNull).collect(Collectors.toList()));
 //    claims.put("auth", authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.joining(","))); // jwt키에 role추가시 사용. 문자열(콤마구분)
 //    claims.put("auth", authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList())); // jwt키에 role추가시 사용. 배열형태
@@ -49,6 +51,7 @@ public class JwtTokenProvider {
 
     return Jwts.builder()
         .setClaims(claims)
+            //.setSubject(principalDto.getAccountId())
         .setIssuedAt(now)
         .setExpiration(expiresIn)
         .signWith(SignatureAlgorithm.HS256, access_token_secret_key)
@@ -62,7 +65,7 @@ public class JwtTokenProvider {
    */
   public Authentication getAuthenticationByAccessToken(String access_token) {
     String userPrincipal = Jwts.parser().setSigningKey(access_token_secret_key).parseClaimsJws(access_token).getBody().getSubject();
-    UserDetails userDetails = userDetailsService.loadUserByUsername(userPrincipal);
+    PrincipalDto userDetails = (PrincipalDto) userDetailsService.loadUserByUsername(userPrincipal);
     
     return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
   }
