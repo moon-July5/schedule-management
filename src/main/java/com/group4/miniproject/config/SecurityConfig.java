@@ -1,6 +1,5 @@
 package com.group4.miniproject.config;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.group4.miniproject.jwt.JwtAccessDeniedHandler;
 import com.group4.miniproject.jwt.JwtAuthenticationEntryPoint;
 import com.group4.miniproject.jwt.JwtTokenFilter;
@@ -8,16 +7,12 @@ import com.group4.miniproject.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
@@ -27,22 +22,18 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Log4j2
 @Configuration
 @RequiredArgsConstructor
+@EnableMethodSecurity
 @EnableWebSecurity
 public class SecurityConfig {
     private final JwtTokenProvider jwtTokenProvider;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
-    @Autowired
-    UserDetailsService userDetailsService;
+    private final UserDetailsService userDetailsService;
 
     @Bean
     public AuthenticationManager authenticationManager(
@@ -80,7 +71,6 @@ public class SecurityConfig {
 //                .anyRequest().permitAll()
                 .requestMatchers("/",
                         "/signup",
-                        "/signin",
                         "/login",
                         "/api/test/**",
                         "/auth/signUp",

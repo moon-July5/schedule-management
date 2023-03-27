@@ -5,6 +5,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -12,12 +13,9 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 
 // Request 이전에 1회 작동할 필터
+@RequiredArgsConstructor
 public class JwtTokenFilter extends OncePerRequestFilter {
-  private JwtTokenProvider jwtTokenProvider;
-
-  public JwtTokenFilter(JwtTokenProvider jwtTokenProvider) {
-    this.jwtTokenProvider = jwtTokenProvider;
-  }
+  private final JwtTokenProvider jwtTokenProvider;
 
   @Override
   protected void doFilterInternal(

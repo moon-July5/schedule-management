@@ -1,17 +1,12 @@
 package com.group4.miniproject.dto;
 
-import com.group4.miniproject.domain.AccountRole;
-import jakarta.persistence.ElementCollection;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import lombok.*;
-
-import java.util.HashSet;
-import java.util.Set;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Builder
 @Data

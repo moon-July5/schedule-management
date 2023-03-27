@@ -6,6 +6,7 @@ import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Component;
 import java.util.Date;
 
 // 유저 정보로 JWT 토큰을 만들거나 토큰을 바탕으로 유저 정보를 가져옴
+@RequiredArgsConstructor
 @Component
 public class JwtTokenProvider {
   @Value("${jwt.token.access-token-secret-key}")
@@ -26,8 +28,7 @@ public class JwtTokenProvider {
   @Value("${jwt.token.access-token-expire-length}")
   private long access_token_expire_time;
 
-  @Autowired
-  private UserDetailsService userDetailsService;
+  private final UserDetailsService userDetailsService;
 
   /**
    * 적절한 설정을 통해 Access 토큰을 생성하여 반환

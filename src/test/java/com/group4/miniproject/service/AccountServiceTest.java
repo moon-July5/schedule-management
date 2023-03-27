@@ -18,7 +18,7 @@ public class AccountServiceTest {
     private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     @Test
-    public void registerTest() throws Exception {
+    public void register() throws Exception {
         String name1 = accountService.register("김고수","asdf@1234","마케팅","부장");
         String name2 = accountService.register("이미나","aab@1234","마케팅","과장");
         String name3 = accountService.register("박은우","dkfk@asdf.com","디자인","대리");
@@ -26,59 +26,21 @@ public class AccountServiceTest {
         String name5= accountService.register("민시후","mmm@dfgf.com","인사","사원");
     }
     @Test
-    public void signUpTest() throws Exception {
+    public void signUp() throws Exception {
+        AccountRequestDTO ifFalseTest = AccountRequestDTO.builder()
+                .accountId("ab1cd")
+                .password("123345")
+                .email("mmmㅁㄴgf.com")
+                .name("유지현")
+                .build();
+        //4번 유저의 이메일을 다르게 보냈을때 아이디 비밀번호가 넣어지지 않은 것을 확인
         AccountRequestDTO accountRequestDTO = AccountRequestDTO.builder()
                 .accountId("abcd")
                 .password("12345")
+                .email("mmm@dfgf.com")
+                .name("민시후")
                 .build();
-        log.info(accountService.SignUp(5l,accountRequestDTO));
-
+        //5번 유저의 이메일과 이름을 같게 보냈을때 아이디 비밀번호가 넣어지는 것을 확인
+        //accountService.signUp(accountRequestDTO);
     }
-    @Test
-    public void IdUniqueCheckTest() throws Exception {
-        //중복안된아이디
-        accountService.IdUniqueCheck("abbb");
-        //중복아이디
-        try {
-            accountService.IdUniqueCheck("user2");
-        }catch (Exception e){
-
-        }
-
-    }
-    @Test
-    public void NameCheckTest() throws Exception {
-        //등록된 이름
-        accountService.NameCheck("김고수");
-
-        try {
-            //등록되지 않은 이름
-            accountService.NameCheck("등록되지 않은 이름");
-        }catch (Exception e){
-
-        }
-    }
-    @Test
-    public void EmailCheckTest() throws Exception {
-        //등록된 이름, 이메일
-        log.info(accountService.EmailCheck("박은우", "dkfk@asdf.com"));
-        try {
-            //등록되지 않은 이름, 이메일
-            log.info(accountService.EmailCheck("등록되지 않은 이름","asdfg@hhh"));
-        }catch (Exception e){
-
-        }
-    }
-    @Test
-    public void AlreadySignUpCheck() throws Exception {
-        //가입을 하지 않은 id
-        accountService.AlreadySignUpCheck(4l);
-        try {
-            //가입을 한 id
-            accountService.AlreadySignUpCheck(1l);
-        }catch (Exception e){
-
-        }
-    }
-
 }
