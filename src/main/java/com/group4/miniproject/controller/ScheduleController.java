@@ -12,10 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RequestMapping("/schedule")
@@ -31,6 +28,19 @@ public class ScheduleController {
                                   BindingResult bindingResult) throws Exception {
 
         boolean result = scheduleService.saveSchedule(scheduleRequestDto, principal);
+
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+    @AuthCheck
+    @BindingCheck
+    @PostMapping("/update/{id}")
+    public ResponseEntity<?> update(@PathVariable Long id,
+                                    @AuthenticationPrincipal PrincipalDto principal,
+                                    @RequestBody @Valid ScheduleRequestDto scheduleRequestDto,
+                                    BindingResult bindingResult) {
+
+        boolean result = scheduleService.updateSchedule(id, scheduleRequestDto, principal);
 
         return new ResponseEntity<>(result, HttpStatus.OK);
     }

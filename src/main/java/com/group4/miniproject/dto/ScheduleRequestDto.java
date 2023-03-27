@@ -16,7 +16,6 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ScheduleRequestDto {
-    private Long id;
     @NotNull(message = "날짜를 선택해 주세요.")
     private LocalDateTime startDate;
 
