@@ -110,6 +110,30 @@ class ScheduleControllerTest {
                 .andDo(print());
     }
 
+    @DisplayName("연차/당직 삭제 테스트")
+    @WithUserDetails("user2")
+    @Test
+    public void deleteScheduleTest1() throws Exception {
+
+        mockMvc.perform(post("/schedule/delete/4")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andDo(print());
+    }
+
+    @DisplayName("연차/당직 삭제 실패 테스트")
+    @WithUserDetails("user2")
+    @Test
+    public void deleteScheduleFailTest1() throws Exception {
+
+        mockMvc.perform(post("/schedule/delete/1")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().is4xxClientError())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andDo(print());
+    }
+
     @Test
     public void localDateTimeTest() {
         ScheduleRequestDto request = ScheduleRequestDto.builder()

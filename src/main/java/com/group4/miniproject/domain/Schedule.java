@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @Getter
 @Builder
 @Where(clause = "is_deleted = false")
-@SQLDelete(sql = "UPDATE schedule SET is_deleted = true, dewlted_at=now() WHERE id = ?")
+@SQLDelete(sql = "UPDATE schedule SET is_deleted = true, deleted_at=now() WHERE id = ?")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity

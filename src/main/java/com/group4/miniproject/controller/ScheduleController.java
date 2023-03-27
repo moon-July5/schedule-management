@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 public class ScheduleController {
     private final ScheduleService scheduleService;
 
+    // 등록 로직
     @AuthCheck
     @BindingCheck
     @PostMapping("/save")
@@ -32,6 +33,7 @@ public class ScheduleController {
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
+    // 수정 로직
     @AuthCheck
     @BindingCheck
     @PostMapping("/update/{id}")
@@ -45,5 +47,15 @@ public class ScheduleController {
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
+    // 삭제 로직
+    @AuthCheck
+    @PostMapping("/delete/{id}")
+    public ResponseEntity<?> delete(@PathVariable Long id,
+                                    @AuthenticationPrincipal PrincipalDto principalDto){
+
+        boolean result = scheduleService.deleteSchedule(id, principalDto);
+
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
 
 }

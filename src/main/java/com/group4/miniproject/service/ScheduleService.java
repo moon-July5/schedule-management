@@ -63,12 +63,12 @@ public class ScheduleService {
 
     // 일정/연차 수정
     public boolean updateSchedule(Long id, ScheduleRequestDto scheduleRequestDto, PrincipalDto principalDto){
-        if(!isScheduleOwner(id, principalDto)){
-            throw new AccessDeniedException("권한이 없습니다.");
-        }
-
         Schedule schedule = scheduleRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("일정이 존재하지 않습니다!"));
+
+        if(!schedule.getAccount().getId().equals(principalDto.getId())){
+            throw new AccessDeniedException("권한이 없습니다.");
+        }
 
         Optional<Account> account = accountRepository.findById(principalDto.getId());
 
@@ -126,12 +126,28 @@ public class ScheduleService {
         log.info("schedule = "+schedule.toString());
         return true;
     }
-    // 본인 체크
-    public boolean isScheduleOwner(Long id, PrincipalDto principal) {
-        Schedule schedule = scheduleRepository.findById(id)
-                .orElseThrow(()-> new EntityNotFoundException("존재하지 않는 일정입니다."));
 
-        return schedule.getAccount().getId().equals(principal.getId());
+    // 연차 / 당직 삭제
+    public boolean deleteSchedule(Long id, PrincipalDto principal){
+        Schedule schedule = scheduleRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("일정이 존재하지 않습니다!"));
+
+        if(!schedule.getAccount().getId().equals(principal.getId())){
+            throw new AccessDeniedException("권한이 없습니다.");
+        }
+
+        // 연차일 경우
+        if(schedule.getType().getType().equals("YEARLY")){
+            Optional<Account> account = accountRepository.findById(principal.getId());
+
+            Long yearly = account.get().getYearly() + Period.between(schedule.getStartDate().toLocalDate()
+                    ,schedule.getEndDate().toLocalDate()).getDays()+1;
+
+            account.get().setYearly(yearly);
+        }
+
+        scheduleRepository.deleteById(id);
+        return true;
     }
 
     // 날짜 차이 계산
