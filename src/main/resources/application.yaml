@@ -2,14 +2,14 @@ spring:
     thymeleaf3:
         decoupled-logic: true
     datasource:
-#        url: jdbc:mysql://localhost:3306/miniproject?useSSL=false&characterEncoding=UTF-8&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true
-#        username: 
-#        password: 
-#        driver-class-name: com.mysql.cj.jdbc.Driver
-        driver-class-name: org.mariadb.jdbc.Driver
-        url: jdbc:mariadb://localhost:3307/profile
-        username: 
-        password: 
+        url: jdbc:mysql://localhost:3306/miniproject?useSSL=false&characterEncoding=UTF-8&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true
+        username: root
+        password: rnjs!@2804
+        driver-class-name: com.mysql.cj.jdbc.Driver
+#        driver-class-name: org.mariadb.jdbc.Driver
+#        url: jdbc:mariadb://localhost:3307/profile
+#        username:
+#        password:
     jpa:
         defer-datasource-initialization: true
         open-in-view: true

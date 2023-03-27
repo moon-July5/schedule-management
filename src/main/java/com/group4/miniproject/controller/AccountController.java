@@ -2,6 +2,7 @@ package com.group4.miniproject.controller;
 
 import com.group4.miniproject.annotation.BindingCheck;
 import com.group4.miniproject.dto.AccountLoginRequestDto;
+import com.group4.miniproject.dto.AccountModifyRequestDTO;
 import com.group4.miniproject.dto.AccountRequestDTO;
 import com.group4.miniproject.dto.ResponseDto;
 import com.group4.miniproject.service.AccountService;
@@ -34,5 +35,12 @@ public class AccountController {
     public ResponseEntity<ResponseDto> signIn(@RequestBody @Valid AccountLoginRequestDto accountRequestDTO,
                                               BindingResult bindingResult) {
         return accountService.signIn(accountRequestDTO);
+    }
+
+    @BindingCheck
+    @PostMapping("/account/update/{accountId}")
+    public ResponseEntity<?> modify(@RequestBody @Valid AccountModifyRequestDTO accountModifyRequestDTO, BindingResult bindingResult) throws Exception {
+
+        return new ResponseEntity<>(accountService.modify(accountModifyRequestDTO), HttpStatus.OK);
     }
 }
