@@ -66,6 +66,7 @@ public class Account extends AuditingFields{
     @Builder.Default
     private Boolean duty = Boolean.FALSE;
 
+    @Setter
     private LocalDateTime deletedAt;
 
     @Setter

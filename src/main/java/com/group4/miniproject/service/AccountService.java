@@ -152,6 +152,15 @@ public class AccountService {
     }
 
   }
+  public ResponseDto delete(AccountDeleteDTO accountDeleteDTO) throws Exception {
+    String accountId = encrypt256.encryptAES256(accountDeleteDTO.getAccountId());
+    Optional<Account> account = accountRepository.findByAccountId(accountId);
+
+    account.get().setIsDeleted(true);
+    account.get().setDeletedAt(LocalDateTime.now());
+    accountRepository.save(account.get());
+    return new ResponseDto("success","삭제완료");
+  }
 
   // 테스트 용
   public String register(String name, String email,String department, String position) throws Exception {

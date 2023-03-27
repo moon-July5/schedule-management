@@ -1,10 +1,7 @@
 package com.group4.miniproject.controller;
 
 import com.group4.miniproject.annotation.BindingCheck;
-import com.group4.miniproject.dto.AccountLoginRequestDto;
-import com.group4.miniproject.dto.AccountModifyRequestDTO;
-import com.group4.miniproject.dto.AccountRequestDTO;
-import com.group4.miniproject.dto.ResponseDto;
+import com.group4.miniproject.dto.*;
 import com.group4.miniproject.service.AccountService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -42,5 +39,10 @@ public class AccountController {
     public ResponseEntity<?> modify(@RequestBody @Valid AccountModifyRequestDTO accountModifyRequestDTO, BindingResult bindingResult) throws Exception {
 
         return new ResponseEntity<>(accountService.modify(accountModifyRequestDTO), HttpStatus.OK);
+    }
+
+    @PostMapping("/account/delete/{accountId}")
+    public ResponseEntity<?> delete(@RequestBody AccountDeleteDTO accountDeleteDTO) throws Exception {
+        return new ResponseEntity<>(accountService.delete(accountDeleteDTO), HttpStatus.OK);
     }
 }
