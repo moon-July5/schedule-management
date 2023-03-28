@@ -132,7 +132,7 @@ public class AccountService {
     String newPassword= passwordEncoder.encode(accountModifyRequestDTO.getNewPassword());
 
     Optional<Account> account = accountRepository.findByAccountId(accountId);
-
+//    passwordEncoder.matches()   사용해보자...
     try{
       Authentication authentication = authenticationManager.authenticate(
               new UsernamePasswordAuthenticationToken(
@@ -153,13 +153,16 @@ public class AccountService {
 
   }
   public ResponseDto delete(AccountDeleteDTO accountDeleteDTO) throws Exception {
+    if(!accountRepository.existsByAccountId(encrypt256.encryptAES256(accountDeleteDTO.getAccountId()))) {
+      throw new IllegalArgumentException("존재하지 않는 아이디 입니다.");
+    }
     String accountId = encrypt256.encryptAES256(accountDeleteDTO.getAccountId());
     Optional<Account> account = accountRepository.findByAccountId(accountId);
 
-    account.get().setIsDeleted(true);
-    account.get().setDeletedAt(LocalDateTime.now());
-    accountRepository.save(account.get());
+
+    accountRepository.deleteById(account.get().getId());
     return new ResponseDto("success","삭제완료");
+    //  로그인 기능 쪽에  isdelete true면 로그인 불가 ?.
   }
 
   // 테스트 용

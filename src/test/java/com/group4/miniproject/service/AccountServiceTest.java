@@ -83,4 +83,12 @@ public class AccountServiceTest {
             log.info(e.getMessage());
         }
     }
+
+    @Test
+    public void deleteTest() throws Exception {
+        AccountDeleteDTO accountDeleteDTO = AccountDeleteDTO.builder().accountId("accountId").build();
+        ResponseDto result = accountService.delete(accountDeleteDTO);
+        log.info(result);
+    }
+
 }

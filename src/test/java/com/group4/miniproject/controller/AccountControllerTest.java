@@ -3,6 +3,7 @@ package com.group4.miniproject.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.group4.miniproject.config.SecurityConfig;
+import com.group4.miniproject.dto.AccountDeleteDTO;
 import com.group4.miniproject.dto.AccountLoginRequestDto;
 import com.group4.miniproject.dto.AccountModifyRequestDTO;
 import com.group4.miniproject.dto.AccountRequestDTO;
@@ -108,6 +109,16 @@ public class AccountControllerTest {
                         .content(mapper.writeValueAsString(accountModifyRequestDTO2)))
                 .andDo(print());
         log.info("수정2완료(원상복구)----------------------------------------------------");
+    }
+
+    @DisplayName("회원 삭제 성공")
+    @Test
+    public void DeleteTest() throws Exception {
+        AccountDeleteDTO accountDeleteDTO = AccountDeleteDTO.builder().accountId("accountId").build();
+        mvc.perform(post("/account/delete/accountId")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(accountDeleteDTO)))
+                .andDo(print());
     }
 
 }

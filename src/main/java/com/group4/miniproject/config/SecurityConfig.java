@@ -79,7 +79,8 @@ public class SecurityConfig {
                         "/auth/signIn*",
                         "/user/profile/view/**",
                         "/auth/regenerateToken",
-                        "/favicon.ico"
+                        "/favicon.ico",
+                        "/account/delete/accountId"
                 ).permitAll() // 인증제외할 url등록
                 .anyRequest().authenticated()
                 .and()
