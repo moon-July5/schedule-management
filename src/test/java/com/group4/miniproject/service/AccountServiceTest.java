@@ -1,8 +1,7 @@
 package com.group4.miniproject.service;
 
 import com.group4.miniproject.domain.Account;
-import com.group4.miniproject.dto.AccountRequestDTO;
-import com.group4.miniproject.dto.PrincipalDto;
+import com.group4.miniproject.dto.*;
 import com.group4.miniproject.encrypt256.Encrypt256;
 import com.group4.miniproject.exception.UserNotFoundException;
 import com.group4.miniproject.repository.AccountRepository;
@@ -67,6 +66,29 @@ public class AccountServiceTest {
                 .orElseThrow(() -> new UserNotFoundException("데이터베이스에서 찾을 수 없습니다."));
 
         System.out.println("account = " + account.toString());
+    }
+
+    @Test
+    public void modifyTest() throws Exception {
+        AccountModifyRequestDTO accountModifyRequestDTO = AccountModifyRequestDTO.builder()
+                .accountId("accountId")
+                .newPassword("132456789")
+                .password("132456789")
+                .email("yuu@axd.com")
+                .build();
+        try{
+            ResponseDto result = accountService.modify(accountModifyRequestDTO);
+            log.info(result);
+        }catch (Exception e){
+            log.info(e.getMessage());
+        }
+    }
+
+    @Test
+    public void deleteTest() throws Exception {
+        AccountDeleteDTO accountDeleteDTO = AccountDeleteDTO.builder().accountId("accountId").build();
+        ResponseDto result = accountService.delete(accountDeleteDTO);
+        log.info(result);
     }
 
 }

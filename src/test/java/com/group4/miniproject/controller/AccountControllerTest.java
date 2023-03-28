@@ -3,7 +3,9 @@ package com.group4.miniproject.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.group4.miniproject.config.SecurityConfig;
+import com.group4.miniproject.dto.AccountDeleteDTO;
 import com.group4.miniproject.dto.AccountLoginRequestDto;
+import com.group4.miniproject.dto.AccountModifyRequestDTO;
 import com.group4.miniproject.dto.AccountRequestDTO;
 
 import lombok.extern.log4j.Log4j2;
@@ -51,8 +53,8 @@ public class AccountControllerTest {
     @Test
     public void AccountControllerFailTest() throws Exception {
         AccountRequestDTO accountRequestDTO = AccountRequestDTO.builder()
-                .name("")
-                .accountId("accountId")
+                .name("유지현")
+                .accountId("accountIs")
                 .email("yuu@axd.com")
                 .password("132456789")
                 .build();
@@ -68,8 +70,8 @@ public class AccountControllerTest {
     @Test
     public void LoginTest() throws Exception {
         AccountLoginRequestDto accountLoginRequestDto = AccountLoginRequestDto.builder()
-                .accountId("admin")
-                .password("12345678")
+                .accountId("accountId")
+                .password("132456789")
                 .build();
 
         mvc.perform(post("/login")
@@ -78,5 +80,45 @@ public class AccountControllerTest {
                 .andDo(print());
     }
 
+    @DisplayName("회원 수정 성공")
+    @Test
+    public void ModifyTest() throws Exception {
+//        테스트 할때는 "/account/update/accountId" 시큐리티 경로 수정
+        AccountModifyRequestDTO accountModifyRequestDTO1 = AccountModifyRequestDTO.builder()
+                .accountId("accountId")
+                .password("132456789")
+                .email("asdfg@adsg")
+                .newPassword("123456789")
+                .build();
+
+        mvc.perform(post("/account/update/accountId")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(accountModifyRequestDTO1)))
+                .andDo(print());
+        log.info("수정1완료------------------------------------------------------");
+
+        AccountModifyRequestDTO accountModifyRequestDTO2 = AccountModifyRequestDTO.builder()
+                .accountId("accountId")
+                .password("123456789")
+                .email("yuu@axd.com")
+                .newPassword("132456789")
+                .build();
+
+        mvc.perform(post("/account/update/accountId")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(accountModifyRequestDTO2)))
+                .andDo(print());
+        log.info("수정2완료(원상복구)----------------------------------------------------");
+    }
+
+    @DisplayName("회원 삭제 성공")
+    @Test
+    public void DeleteTest() throws Exception {
+        AccountDeleteDTO accountDeleteDTO = AccountDeleteDTO.builder().accountId("accountId").build();
+        mvc.perform(post("/account/delete/accountId")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(accountDeleteDTO)))
+                .andDo(print());
+    }
 
 }

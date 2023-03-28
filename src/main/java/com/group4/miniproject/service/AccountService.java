@@ -2,10 +2,7 @@ package com.group4.miniproject.service;
 
 import com.group4.miniproject.domain.Account;
 import com.group4.miniproject.domain.SuccessLogin;
-import com.group4.miniproject.dto.AccountLoginRequestDto;
-import com.group4.miniproject.dto.AccountRequestDTO;
-import com.group4.miniproject.dto.AccountResponseDTO;
-import com.group4.miniproject.dto.ResponseDto;
+import com.group4.miniproject.dto.*;
 import com.group4.miniproject.encrypt256.Encrypt256;
 import com.group4.miniproject.jwt.JwtTokenProvider;
 import com.group4.miniproject.repository.AccountRepository;
@@ -127,6 +124,45 @@ public class AccountService {
     } catch (Exception e) {
       throw new RuntimeException(e);
     }
+  }
+
+  public ResponseDto modify(AccountModifyRequestDTO accountModifyRequestDTO) throws Exception {
+    String accountId = encrypt256.encryptAES256(accountModifyRequestDTO.getAccountId());
+    String email = encrypt256.encryptAES256(accountModifyRequestDTO.getEmail());
+    String newPassword= passwordEncoder.encode(accountModifyRequestDTO.getNewPassword());
+
+    Optional<Account> account = accountRepository.findByAccountId(accountId);
+//    passwordEncoder.matches()   사용해보자...
+    try{
+      Authentication authentication = authenticationManager.authenticate(
+              new UsernamePasswordAuthenticationToken(
+                      accountModifyRequestDTO.getAccountId(),
+                      accountModifyRequestDTO.getPassword()
+              )
+      );
+      account.get().setPassword(newPassword);
+      account.get().setEmail(email);
+      log.info(account.get());
+      accountRepository.save(account.get());
+      return new ResponseDto("success","수정완료");
+    }catch (AuthenticationException e) {
+      throw new IllegalArgumentException("비밀번호를 확인해 주세요");
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
+
+  }
+  public ResponseDto delete(AccountDeleteDTO accountDeleteDTO) throws Exception {
+    if(!accountRepository.existsByAccountId(encrypt256.encryptAES256(accountDeleteDTO.getAccountId()))) {
+      throw new IllegalArgumentException("존재하지 않는 아이디 입니다.");
+    }
+    String accountId = encrypt256.encryptAES256(accountDeleteDTO.getAccountId());
+    Optional<Account> account = accountRepository.findByAccountId(accountId);
+
+
+    accountRepository.deleteById(account.get().getId());
+    return new ResponseDto("success","삭제완료");
+    //  로그인 기능 쪽에  isdelete true면 로그인 불가 ?.
   }
 
   // 테스트 용

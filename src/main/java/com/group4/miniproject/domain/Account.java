@@ -17,7 +17,7 @@ import java.util.Set;
 @Getter
 @Builder
 @Where(clause = "is_deleted = false")
-@SQLDelete(sql = "UPDATE account SET is_deleted = true, dewlted_at=now() WHERE id = ?")
+@SQLDelete(sql = "UPDATE account SET is_deleted = true, deleted_at=now() WHERE id = ?")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
@@ -66,6 +66,7 @@ public class Account extends AuditingFields{
     @Builder.Default
     private Boolean duty = Boolean.FALSE;
 
+    @Setter
     private LocalDateTime deletedAt;
 
     @Setter
