@@ -19,6 +19,7 @@ import java.time.LocalDateTime;
 import java.time.Period;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -31,6 +32,16 @@ class ScheduleControllerTest {
     @Autowired
     private MockMvc mockMvc;
     @Autowired private ObjectMapper objectMapper;
+
+    @DisplayName("연차/당직 개인 조회 테스트")
+    @WithUserDetails("user2")
+    @Test
+    public void getListTest1() throws Exception {
+        mockMvc.perform(get("/schedule/3"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andDo(print());
+    }
 
     @DisplayName("연차/당직 등록 테스트")
     @WithUserDetails("admin")

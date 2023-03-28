@@ -30,7 +30,15 @@ public class ScheduleController {
 
         boolean result = scheduleService.saveSchedule(scheduleRequestDto, principal);
 
-        return new ResponseEntity<>(result, HttpStatus.OK);
+        return new ResponseEntity<>(result, HttpStatus.CREATED);
+    }
+
+    // 유저에 따른 일정/당직 조회 로직
+    @AuthCheck
+    @GetMapping("/{id}")
+    public ResponseEntity<?> read(@PathVariable Long id) throws Exception {
+
+        return new ResponseEntity<>(scheduleService.getSchedulesById(id), HttpStatus.OK);
     }
 
     // 수정 로직
@@ -51,9 +59,9 @@ public class ScheduleController {
     @AuthCheck
     @PostMapping("/delete/{id}")
     public ResponseEntity<?> delete(@PathVariable Long id,
-                                    @AuthenticationPrincipal PrincipalDto principalDto){
+                                    @AuthenticationPrincipal PrincipalDto principal){
 
-        boolean result = scheduleService.deleteSchedule(id, principalDto);
+        boolean result = scheduleService.deleteSchedule(id, principal);
 
         return new ResponseEntity<>(result, HttpStatus.OK);
     }

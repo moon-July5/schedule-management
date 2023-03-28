@@ -4,6 +4,8 @@ import com.group4.miniproject.domain.Account;
 import com.group4.miniproject.domain.Schedule;
 import com.group4.miniproject.dto.PrincipalDto;
 import com.group4.miniproject.dto.ScheduleRequestDto;
+import com.group4.miniproject.dto.ScheduleResponseDto;
+import com.group4.miniproject.encrypt256.Encrypt256;
 import com.group4.miniproject.repository.AccountRepository;
 import com.group4.miniproject.repository.ScheduleRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -25,9 +27,17 @@ public class ScheduleService {
     private final ScheduleRepository scheduleRepository;
     private final AccountRepository accountRepository;
 
+    private Encrypt256 encrypt256 = new Encrypt256();
+
+    // 개인 일정/당직 조회
+    public ScheduleResponseDto getSchedulesById(Long id) throws Exception {
+        Account account = accountRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("유효하지 않은 id 입니다."));
+
+        return ScheduleResponseDto.from(encrypt256, account);
+    }
     // 일정 / 당직 등록
-    public boolean saveSchedule(ScheduleRequestDto scheduleRequestDto, PrincipalDto principalDto)
-            throws Exception {
+    public boolean saveSchedule(ScheduleRequestDto scheduleRequestDto, PrincipalDto principalDto) {
         Optional<Account> account = accountRepository.findById(principalDto.getId());
         log.info("account = "+account);
 
