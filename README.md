@@ -11,12 +11,13 @@
 * Spring Boot 3.0.4
 * Gradle 7.6.1
 
-## Dependencies
+## 📌 Dependencies
 * Spring Web
 * Spring Security
+* Spring Data Jpa
 * lombok
 * devtools
-* Mysql Or MariaDB
+* Mysql Or MariaDB Driver
 * jjwt
 * validation
 
