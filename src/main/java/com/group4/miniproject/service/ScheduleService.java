@@ -2,9 +2,7 @@ package com.group4.miniproject.service;
 
 import com.group4.miniproject.domain.Account;
 import com.group4.miniproject.domain.Schedule;
-import com.group4.miniproject.dto.PrincipalDto;
-import com.group4.miniproject.dto.ScheduleRequestDto;
-import com.group4.miniproject.dto.ScheduleResponseDto;
+import com.group4.miniproject.dto.*;
 import com.group4.miniproject.util.Encrypt256;
 import com.group4.miniproject.repository.AccountRepository;
 import com.group4.miniproject.repository.ScheduleRepository;
@@ -15,8 +13,11 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Period;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Log4j2
@@ -159,6 +160,44 @@ public class ScheduleService {
         Period diff = Period.between(start.toLocalDate(), end.toLocalDate());
 
         return diff.getDays()+1;
+
+    }
+
+    public List<ScheduleTodayResponseDTO> getTodayDuty(ScheduleTodayRequestDTO scheduleTodayRequestDTO){
+        LocalDateTime today = scheduleTodayRequestDTO.getStart_date();
+        List<Schedule> scheduleList = scheduleRepository.findAll();
+        List<Account> accountList = new ArrayList<>();
+        for (Schedule i:scheduleList) {
+            if(checkToday(i.getStartDate(),i.getEndDate(),today)){
+                accountList.add(accountRepository.findById(i.getAccount().getId()).get());
+            }
+        }
+        List<ScheduleTodayResponseDTO> resultList = new ArrayList<>();
+        if(accountList.isEmpty()){
+            throw new IllegalArgumentException("당직이 존재하지 않습니다.");
+        }
+        for (Account i:accountList) {
+            resultList.add(
+                    new ScheduleTodayResponseDTO().builder()
+                            .name(i.getName())
+                            .position(i.getPosition())
+                            .department(i.getDepartment())
+                            .duty(i.getDuty())
+                            .build()
+
+            );
+        }
+        return resultList;
+    }
+    private boolean checkToday(LocalDateTime start,LocalDateTime end,LocalDateTime today){
+        LocalDate startDate =start.toLocalDate();
+        LocalDate endDate = end.toLocalDate();
+        LocalDate today1 = today.toLocalDate();
+        // 시작날자  <  오늘 < 끝 or 시작=오늘 or 오늘 = 끝
+        if((startDate.isAfter(today1) && endDate.isBefore(today1))||(startDate.isEqual(today1))||(endDate.isEqual(today1))){
+            return true;
+        }
+        return false;
 
     }
 }

@@ -6,6 +6,7 @@ import com.group4.miniproject.config.SecurityConfig;
 import com.group4.miniproject.domain.Schedule;
 import com.group4.miniproject.domain.ScheduleType;
 import com.group4.miniproject.dto.ScheduleRequestDto;
+import com.group4.miniproject.dto.ScheduleTodayRequestDTO;
 import com.group4.miniproject.repository.ScheduleRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -151,6 +152,7 @@ class ScheduleControllerTest {
                 .andDo(print());
     }
 
+
     @Test
     public void localDateTimeTest() {
         ScheduleRequestDto request = ScheduleRequestDto.builder()
@@ -186,4 +188,31 @@ class ScheduleControllerTest {
         }
     }
 
+
+    @Test
+    public void todayDutyControllerTest() throws Exception {
+        ScheduleTodayRequestDTO scheduleTodayRequestDTO = ScheduleTodayRequestDTO.builder()
+                .end_date(LocalDateTime.of(2023,04,05,01,00,00))
+                .start_date(LocalDateTime.of(2023,04,05,01,00,00))
+                .build();
+
+        mockMvc.perform(get("/schedule/today-duty")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(scheduleTodayRequestDTO)))
+                .andExpect(status().isOk())
+                .andDo(print());
+    }
+    @Test
+    public void todayDutyControllerTest당직존재X() throws Exception {
+        ScheduleTodayRequestDTO scheduleTodayRequestDTO = ScheduleTodayRequestDTO.builder()
+                .end_date(LocalDateTime.of(2023,04,8,01,00,00))
+                .start_date(LocalDateTime.of(2023,04,8,01,00,00))
+                .build();
+
+        mockMvc.perform(get("/schedule/today-duty")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(scheduleTodayRequestDTO)))
+                .andExpect(status().isOk())
+                .andDo(print());
+    }
 }
