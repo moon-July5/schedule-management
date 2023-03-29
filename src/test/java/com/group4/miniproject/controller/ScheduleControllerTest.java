@@ -3,8 +3,10 @@ package com.group4.miniproject.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.group4.miniproject.config.SecurityConfig;
+import com.group4.miniproject.domain.Schedule;
 import com.group4.miniproject.domain.ScheduleType;
 import com.group4.miniproject.dto.ScheduleRequestDto;
+import com.group4.miniproject.repository.ScheduleRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,9 +16,11 @@ import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.Period;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -33,6 +37,8 @@ class ScheduleControllerTest {
     private MockMvc mockMvc;
     @Autowired private ObjectMapper objectMapper;
 
+    @Autowired private ScheduleRepository scheduleRepository;
+
     @DisplayName("연차/당직 개인 조회 테스트")
     @WithUserDetails("user2")
     @Test
@@ -44,7 +50,7 @@ class ScheduleControllerTest {
     }
 
     @DisplayName("연차/당직 등록 테스트")
-    @WithUserDetails("admin")
+    @WithUserDetails("user2")
     @Test
     public void saveScheduleTest1() throws Exception {
         ScheduleRequestDto request = ScheduleRequestDto.builder()
@@ -56,7 +62,7 @@ class ScheduleControllerTest {
         mockMvc.perform(post("/schedule/save")
                         .content(objectMapper.writeValueAsString(request))
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andDo(print());
     }
@@ -76,7 +82,7 @@ class ScheduleControllerTest {
         mockMvc.perform(post("/schedule/save")
                         .content(objectMapper.writeValueAsString(request))
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 //.andExpect(status().is4xxClientError())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andDo(print());
@@ -164,6 +170,20 @@ class ScheduleControllerTest {
 
         System.out.println("diff.getDays() = " + diff.getDays());
 
+    }
+
+    @Transactional
+    @Test
+    public void queryMethodTest1() {
+        LocalDateTime startDate = LocalDateTime.of(2023, 03, 29, 0, 0, 0);
+        LocalDateTime endDate = LocalDateTime.of(2023, 04, 03, 0, 0,0 );
+
+        List<Schedule> schedules = scheduleRepository.findDutySchedulesBetween(startDate, endDate);
+
+
+        for(Schedule schedule : schedules){
+            System.out.println("schedule = " + schedule);
+        }
     }
 
 }

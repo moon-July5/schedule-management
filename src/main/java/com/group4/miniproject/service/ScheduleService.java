@@ -1,6 +1,7 @@
 package com.group4.miniproject.service;
 
 import com.group4.miniproject.domain.Account;
+import com.group4.miniproject.domain.AccountRole;
 import com.group4.miniproject.domain.Schedule;
 import com.group4.miniproject.dto.PrincipalDto;
 import com.group4.miniproject.dto.ScheduleRequestDto;
@@ -17,7 +18,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.Period;
+import java.util.Collections;
 import java.util.Optional;
+import java.util.Set;
 
 @Log4j2
 @Transactional
@@ -29,27 +32,22 @@ public class ScheduleService {
 
     private Encrypt256 encrypt256 = new Encrypt256();
 
-    // 개인 일정/당직 조회
+    // 개인 연차/당직 조회
     public ScheduleResponseDto getSchedulesById(Long id) throws Exception {
         Account account = accountRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("유효하지 않은 id 입니다."));
 
         return ScheduleResponseDto.from(encrypt256, account);
     }
-    // 일정 / 당직 등록
+    // 연차/당직 등록
     public boolean saveSchedule(ScheduleRequestDto scheduleRequestDto, PrincipalDto principalDto) {
         Optional<Account> account = accountRepository.findById(principalDto.getId());
         log.info("account = "+account);
 
-        // 당직 여부가 false면
-        if(!account.get().getDuty()){
-            throw new IllegalArgumentException("당직 일정을 선택하실 수 없습니다!");
-        }
-
         // 타입이 일정이면
         if(scheduleRequestDto.getScheduleType().getType().equals("PLAN")){
             if(scheduleRequestDto.getContent().equals(""))
-                throw new IllegalArgumentException("일정 내용을 작성해주세요!");
+                throw new IllegalArgumentException("일정 내용을 작성해 주세요!");
         }
 
         Long yearly = account.get().getYearly() - diff(scheduleRequestDto);
@@ -71,7 +69,7 @@ public class ScheduleService {
         return true;
     }
 
-    // 일정/연차 수정
+    // 연차/당직 수정
     public boolean updateSchedule(Long id, ScheduleRequestDto scheduleRequestDto, PrincipalDto principalDto){
         Schedule schedule = scheduleRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("일정이 존재하지 않습니다!"));
@@ -84,15 +82,11 @@ public class ScheduleService {
 
         log.info("account = "+account);
 
-        // 당직 여부가 false면
-        if(!account.get().getDuty()){
-            throw new IllegalArgumentException("당직 일정을 선택하실 수 없습니다!");
-        }
 
         // 타입이 일정이면
         if(scheduleRequestDto.getScheduleType().getType().equals("PLAN")){
             if(scheduleRequestDto.getContent().equals(""))
-                throw new IllegalArgumentException("일정 내용을 작성해주세요!");
+                throw new IllegalArgumentException("일정 내용을 작성해 주세요!");
         }
 
         // 수정하기 전 날짜 차이

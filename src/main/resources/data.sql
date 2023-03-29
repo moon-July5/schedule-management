@@ -11,7 +11,8 @@ insert into ACCOUNT_ROLES (ACCOUNT_ID,ROLES)
 values (2,'ROLE_USER');
 
 insert into ACCOUNT (CREATED_AT, MODIFIED_AT, DELETED_AT, IS_DELETED, NAME, PASSWORD, ACCOUNT_ID, EMAIL, DEPARTMENT, POSITION, YEARLY, DUTY)
-VALUES (now(),now(),null,false, 'otmdHXusOMNyJmOX5eV6mw==','$2a$10$eabjAFIFCj9u6nqA9mJL0O7yIBISaEb0ZtDo.3g3UQBPGix1PWiui','Ln02Pz/an6e503b9rLxQVA==', 'txWocglGvpSkvWajAlg8Gg==', 'e9sbZK9Grag43l8xi+EJEA==','T8sAGMymR4WJibqWe1UL+g==',5, true);
+VALUES (now(),now(),null,false, 'otmdHXusOMNyJmOX5eV6mw==','$2a$10$eabjAFIFCj9u6nqA9mJL0O7yIBISaEb0ZtDo.3g3UQBPGix1PWiui','Ln02Pz/an6e503b9rLxQVA==', 'txWocglGvpSkvWajAlg8Gg==', 'e9sbZK9Grag43l8xi+EJEA==','T8sAGMymR4WJibqWe1UL+g==',5, false
+);
 
 insert into ACCOUNT_ROLES (ACCOUNT_ID,ROLES)
 values (3,'ROLE_USER');
