@@ -3,11 +3,10 @@ package com.group4.miniproject.config;
 import com.group4.miniproject.domain.Account;
 import com.group4.miniproject.domain.AccountRole;
 import com.group4.miniproject.dto.PrincipalDto;
-import com.group4.miniproject.encrypt256.Encrypt256;
+import com.group4.miniproject.util.Encrypt256;
 import com.group4.miniproject.exception.UserNotFoundException;
 import com.group4.miniproject.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -34,7 +33,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     System.out.println("name in loadUserByUsername = " + accountId);
     Account account = null; // db에서 유저조회
     try {
-      account = accountRepository.findByAccountId(encrypt256.encryptAES256(accountId))
+      account = accountRepository.findByAccountId(accountId)
               .orElseThrow(() -> new UserNotFoundException(accountId + " -> 데이터베이스에서 찾을 수 없습니다."));
     } catch (Exception e) {
       throw new RuntimeException(e);

@@ -4,7 +4,6 @@ package com.group4.miniproject.dto;
 import com.group4.miniproject.domain.Account;
 import com.group4.miniproject.domain.Schedule;
 import com.group4.miniproject.domain.ScheduleType;
-import com.group4.miniproject.encrypt256.Encrypt256;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -46,13 +45,13 @@ public class ScheduleResponseDto {
         }
     }
 
-    public static ScheduleResponseDto from(Encrypt256 encrypt256, Account account) throws Exception {
+    public static ScheduleResponseDto from( Account account) throws Exception {
         return ScheduleResponseDto.builder()
                 .id(account.getId())
-                .accountId(encrypt256.decryptAES256(account.getAccountId()))
-                .name(encrypt256.decryptAES256(account.getName()))
-                .department(encrypt256.decryptAES256(account.getDepartment()))
-                .position(encrypt256.decryptAES256(account.getPosition()))
+                .accountId(account.getAccountId())
+                .name(account.getName())
+                .department(account.getDepartment())
+                .position(account.getPosition())
                 .schedules(account.getSchedules().stream().map(ScheduleData::new).collect(Collectors.toList()))
                 .build();
     }

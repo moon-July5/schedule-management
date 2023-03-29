@@ -1,7 +1,7 @@
 package com.group4.miniproject.domain;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.group4.miniproject.util.Encrypt256;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.SQLDelete;
@@ -25,12 +25,15 @@ public class Account extends AuditingFields{
     private Long id;
 
     @Setter
+    @Convert(converter = Encrypt256.class)
     private String name;
 
     @Setter
     private String password;
 
     @Setter
+    @Convert(converter = Encrypt256.class)
+
     private String accountId;
 
     @Setter
@@ -50,12 +53,18 @@ public class Account extends AuditingFields{
     private SuccessLogin successLogin;
 
     @Setter
+    @Convert(converter = Encrypt256.class)
+
     private String email;
 
     @Setter
+    @Convert(converter = Encrypt256.class)
+
     private String department;
 
     @Setter
+    @Convert(converter = Encrypt256.class)
+
     private String position;
 
     @Setter

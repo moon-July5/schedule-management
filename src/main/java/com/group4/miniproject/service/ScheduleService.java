@@ -1,12 +1,11 @@
 package com.group4.miniproject.service;
 
 import com.group4.miniproject.domain.Account;
-import com.group4.miniproject.domain.AccountRole;
 import com.group4.miniproject.domain.Schedule;
 import com.group4.miniproject.dto.PrincipalDto;
 import com.group4.miniproject.dto.ScheduleRequestDto;
 import com.group4.miniproject.dto.ScheduleResponseDto;
-import com.group4.miniproject.encrypt256.Encrypt256;
+import com.group4.miniproject.util.Encrypt256;
 import com.group4.miniproject.repository.AccountRepository;
 import com.group4.miniproject.repository.ScheduleRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -18,9 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.Period;
-import java.util.Collections;
 import java.util.Optional;
-import java.util.Set;
 
 @Log4j2
 @Transactional
@@ -37,7 +34,7 @@ public class ScheduleService {
         Account account = accountRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("유효하지 않은 id 입니다."));
 
-        return ScheduleResponseDto.from(encrypt256, account);
+        return ScheduleResponseDto.from( account);
     }
     // 연차/당직 등록
     public boolean saveSchedule(ScheduleRequestDto scheduleRequestDto, PrincipalDto principalDto) {

@@ -3,7 +3,6 @@ package com.group4.miniproject.service;
 import com.group4.miniproject.domain.Account;
 import com.group4.miniproject.domain.SuccessLogin;
 import com.group4.miniproject.dto.*;
-import com.group4.miniproject.encrypt256.Encrypt256;
 import com.group4.miniproject.jwt.JwtTokenProvider;
 import com.group4.miniproject.repository.AccountRepository;
 import com.group4.miniproject.repository.SuccessLoginRepository;
@@ -33,23 +32,23 @@ public class AccountService {
   private final JwtTokenProvider jwtTokenProvider;
   private final AuthenticationManager authenticationManager;
   private final SuccessLoginRepository successLoginRepository;
-  private Encrypt256 encrypt256 = new Encrypt256();
+
 
   @Transactional
   public AccountResponseDTO signUp(AccountRequestDTO accountRequestDTO) throws Exception {
     log.info("-----------------------signUpStart------------------------------");
-    if(!accountRepository.existsByEmail(encrypt256.encryptAES256(accountRequestDTO.getEmail()))) {
+    if(!accountRepository.existsByEmail(accountRequestDTO.getEmail())) {
       throw new IllegalArgumentException("checkEmail");
     }
-    if(!accountRepository.existsByName(encrypt256.encryptAES256(accountRequestDTO.getName()))) {
+    if(!accountRepository.existsByName(accountRequestDTO.getName())) {
       throw new IllegalArgumentException("checkName");
     }
-    if(accountRepository.existsByAccountId(encrypt256.encryptAES256(accountRequestDTO.getAccountId()))) {
+    if(accountRepository.existsByAccountId(accountRequestDTO.getAccountId())) {
       throw new IllegalArgumentException("duplicateId");
     }
 
     // pk 추출
-    Long id = accountRepository.findByEmail(encrypt256.encryptAES256(accountRequestDTO.getEmail())).get().getId();
+    Long id = accountRepository.findByEmail(accountRequestDTO.getEmail()).get().getId();
 
     // 사용자 조회
     Optional<Account> account= accountRepository.findById(id);
@@ -59,16 +58,16 @@ public class AccountService {
       throw new IllegalArgumentException("existId");
     }
 
-    String accountId = encrypt256.encryptAES256(accountRequestDTO.getAccountId());
+    String accountId =accountRequestDTO.getAccountId();
     String password = passwordEncoder.encode(accountRequestDTO.getPassword());
 
 
     account.get().setAccountId(accountId);
     account.get().setPassword(password);
     AccountResponseDTO accountResponseDTO = AccountResponseDTO.builder()
-            .department(encrypt256.decryptAES256(account.get().getDepartment()))
-            .email(encrypt256.decryptAES256(account.get().getEmail()))
-            .name(encrypt256.decryptAES256(account.get().getName()))
+            .department(account.get().getDepartment())
+            .email(account.get().getEmail())
+            .name(account.get().getName())
             .build();
     log.info("-----------------------signUpFinish------------------------------");
     return accountResponseDTO;
@@ -96,7 +95,7 @@ public class AccountService {
       );
 
       // 로그인성공 시 마지막 로그 db에 이력 저장(account_id가 있으면 업데이트)
-      Account account = accountRepository.findByAccountId(encrypt256.encryptAES256(accountRequestDTO.getAccountId()))
+      Account account = accountRepository.findByAccountId(accountRequestDTO.getAccountId())
               .get();
 
       Optional<SuccessLogin> successLoginOptional = successLoginRepository.findByAccount(account);
@@ -127,8 +126,8 @@ public class AccountService {
   }
 
   public ResponseDto modify(AccountModifyRequestDTO accountModifyRequestDTO) throws Exception {
-    String accountId = encrypt256.encryptAES256(accountModifyRequestDTO.getAccountId());
-    String email = encrypt256.encryptAES256(accountModifyRequestDTO.getEmail());
+    String accountId = accountModifyRequestDTO.getAccountId();
+    String email = accountModifyRequestDTO.getEmail();
     String newPassword= passwordEncoder.encode(accountModifyRequestDTO.getNewPassword());
 
     Optional<Account> account = accountRepository.findByAccountId(accountId);
@@ -153,10 +152,10 @@ public class AccountService {
 
   }
   public ResponseDto delete(AccountDeleteDTO accountDeleteDTO) throws Exception {
-    if(!accountRepository.existsByAccountId(encrypt256.encryptAES256(accountDeleteDTO.getAccountId()))) {
+    if(!accountRepository.existsByAccountId(accountDeleteDTO.getAccountId())) {
       throw new IllegalArgumentException("존재하지 않는 아이디 입니다.");
     }
-    String accountId = encrypt256.encryptAES256(accountDeleteDTO.getAccountId());
+    String accountId = accountDeleteDTO.getAccountId();
     Optional<Account> account = accountRepository.findByAccountId(accountId);
 
 
@@ -168,14 +167,14 @@ public class AccountService {
   // 테스트 용
   public String register(String name, String email,String department, String position) throws Exception {
     Account account = Account.builder()
-            .name(encrypt256.encryptAES256(name))
-            .email(encrypt256.encryptAES256(email))
-            .department(encrypt256.encryptAES256(department))
-            .position(encrypt256.encryptAES256(position))
+            .name(name)
+            .email(email)
+            .department(department)
+            .position(position)
             .build();
 
     accountRepository.save(account);
-    return encrypt256.decryptAES256(account.getName());
+    return account.getName();
   }
 
 }
