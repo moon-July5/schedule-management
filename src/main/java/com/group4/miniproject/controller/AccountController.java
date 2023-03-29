@@ -29,7 +29,7 @@ public class AccountController {
 
     @BindingCheck
     @PostMapping("/login")
-    public ResponseEntity<ResponseDto> signIn(@RequestBody @Valid AccountLoginRequestDto accountRequestDTO,
+    public ResponseEntity<AccountLoginResponseDTO> signIn(@RequestBody @Valid AccountLoginRequestDto accountRequestDTO,
                                               BindingResult bindingResult) {
         return accountService.signIn(accountRequestDTO);
     }
