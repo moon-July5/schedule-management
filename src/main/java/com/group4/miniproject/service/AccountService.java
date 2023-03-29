@@ -39,13 +39,13 @@ public class AccountService {
   public AccountResponseDTO signUp(AccountRequestDTO accountRequestDTO) throws Exception {
     log.info("-----------------------signUpStart------------------------------");
     if(!accountRepository.existsByEmail(encrypt256.encryptAES256(accountRequestDTO.getEmail()))) {
-      throw new IllegalArgumentException("일치하는 이메일이 없습니다.");
+      throw new IllegalArgumentException("checkEmail");
     }
     if(!accountRepository.existsByName(encrypt256.encryptAES256(accountRequestDTO.getName()))) {
-      throw new IllegalArgumentException("일치하는 이름이 없습니다.");
+      throw new IllegalArgumentException("checkName");
     }
     if(accountRepository.existsByAccountId(encrypt256.encryptAES256(accountRequestDTO.getAccountId()))) {
-      throw new IllegalArgumentException("이미 존재하고 있는 아이디 입니다");
+      throw new IllegalArgumentException("duplicateId");
     }
 
     // pk 추출
@@ -56,7 +56,7 @@ public class AccountService {
 
     // 이미 존재하고 있는 아이디인지 확인
     if(account.get().getAccountId()!=null){
-      throw new IllegalArgumentException("가입된 아이디가 있습니다.");
+      throw new IllegalArgumentException("existId");
     }
 
     String accountId = encrypt256.encryptAES256(accountRequestDTO.getAccountId());
