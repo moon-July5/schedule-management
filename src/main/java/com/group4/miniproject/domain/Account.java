@@ -1,6 +1,7 @@
 package com.group4.miniproject.domain;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.SQLDelete;
@@ -8,10 +9,7 @@ import org.hibernate.annotations.Where;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 @ToString
 @Getter
@@ -41,10 +39,11 @@ public class Account extends AuditingFields{
     @Builder.Default
     private Set<AccountRole> roles = new HashSet<>();
 
+    //@JsonIgnoreProperties({"account"})
     @OneToMany(mappedBy = "account", cascade = CascadeType.ALL)
     @ToString.Exclude
     @Builder.Default
-    private Set<Schedule> schedules = new LinkedHashSet<>();
+    private List<Schedule> schedules = new ArrayList<>();
 
     @OneToOne(mappedBy = "account")
     @ToString.Exclude
