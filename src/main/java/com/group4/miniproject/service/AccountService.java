@@ -1,6 +1,7 @@
 package com.group4.miniproject.service;
 
 import com.group4.miniproject.domain.Account;
+import com.group4.miniproject.domain.Schedule;
 import com.group4.miniproject.domain.SuccessLogin;
 import com.group4.miniproject.dto.*;
 import com.group4.miniproject.jwt.JwtTokenProvider;
@@ -12,6 +13,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -21,6 +23,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Log4j2
@@ -79,7 +83,7 @@ public class AccountService {
    * @param accountRequestDTO 유저의 이메일과 비밀번호
    * @return json web token
    */
-  public ResponseEntity<ResponseDto> signIn(AccountLoginRequestDto accountRequestDTO) {
+  public ResponseEntity<AccountLoginResponseDTO> signIn(AccountLoginRequestDto accountRequestDTO) {
     try {
 //      Authentication authentication = authenticationManager.authenticate(
 //          new UsernamePasswordAuthenticationToken(
@@ -113,13 +117,30 @@ public class AccountService {
         successLogin.setClientIp(HttpReqRespUtils.getClientIpAddressIfServletRequestExist());
       }
       successLoginRepository.save(successLogin);
+      List<Long> scheduleId = new ArrayList<>();
+      for (Schedule i:account.getSchedules()) {
+            scheduleId.add(i.getId());
+      }
 
       System.out.println("accountRequestDTO.getAccountId()" + accountRequestDTO.getAccountId());
       String token = jwtTokenProvider.generateAccessToken(authentication); // 토큰생성
-      return new ResponseEntity<>(new ResponseDto("success", token), HttpStatus.OK);
+      AccountLoginResponseDTO accountLoginResponseDTO= AccountLoginResponseDTO.builder()
+              .accountRole(account.getRoles())
+              .accountId(account.getAccountId())
+              .yearly(account.getYearly())
+              .duty(account.getDuty())
+              .department(account.getDepartment())
+              .position(account.getPosition())
+              .email(account.getEmail())
+              .name(account.getName())
+              .scheduleId(scheduleId)
+              .JWTToken(token)
+              .build();
+
+      return new ResponseEntity<>(accountLoginResponseDTO, HttpStatus.OK);
 
     } catch (AuthenticationException e) {
-      return new ResponseEntity<>(new ResponseDto("fail", "Invalid credentials supplied"), HttpStatus.OK);
+      throw new BadCredentialsException("로그인에 실패하셨습니다");
     } catch (Exception e) {
       throw new RuntimeException(e);
     }
