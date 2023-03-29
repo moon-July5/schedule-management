@@ -2,10 +2,9 @@ package com.group4.miniproject.service;
 
 import com.group4.miniproject.domain.Account;
 import com.group4.miniproject.dto.*;
-import com.group4.miniproject.encrypt256.Encrypt256;
+import com.group4.miniproject.util.Encrypt256;
 import com.group4.miniproject.exception.UserNotFoundException;
 import com.group4.miniproject.repository.AccountRepository;
-import com.group4.miniproject.service.AccountService;
 import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,7 +61,7 @@ public class AccountServiceTest {
 
     @Test
     public void findByAccountIdTest1() throws Exception {
-        Account account = accountRepository.findByAccountId(encrypt256.encryptAES256("admin"))
+        Account account = accountRepository.findByAccountId("admin")
                 .orElseThrow(() -> new UserNotFoundException("데이터베이스에서 찾을 수 없습니다."));
 
         System.out.println("account = " + account.toString());
