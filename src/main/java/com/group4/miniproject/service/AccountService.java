@@ -22,7 +22,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -117,33 +119,45 @@ public class AccountService {
         successLogin.setClientIp(HttpReqRespUtils.getClientIpAddressIfServletRequestExist());
       }
       successLoginRepository.save(successLogin);
-      List<Long> scheduleId = new ArrayList<>();
-      for (Schedule i:account.getSchedules()) {
-            scheduleId.add(i.getId());
-      }
+//      List<Long> scheduleId = new ArrayList<>();
+//      for (Schedule i:account.getSchedules()) {
+//            scheduleId.add(i.getId());
+//      }
 
       System.out.println("accountRequestDTO.getAccountId()" + accountRequestDTO.getAccountId());
       String token = jwtTokenProvider.generateAccessToken(authentication); // 토큰생성
-      AccountLoginResponseDTO accountLoginResponseDTO= AccountLoginResponseDTO.builder()
-              .accountRole(account.getRoles())
-              .accountId(account.getAccountId())
-              .yearly(account.getYearly())
-              .duty(account.getDuty())
-              .department(account.getDepartment())
-              .position(account.getPosition())
-              .email(account.getEmail())
-              .name(account.getName())
-              .scheduleId(scheduleId)
-              .JWTToken(token)
-              .build();
-
-      return new ResponseEntity<>(accountLoginResponseDTO, HttpStatus.OK);
+//      AccountLoginResponseDTO accountLoginResponseDTO= AccountLoginResponseDTO.builder()
+//              .accountRole(account.getRoles())
+//              .accountId(account.getAccountId())
+//              .yearly(account.getYearly())
+//              .duty(account.getDuty())
+//              .department(account.getDepartment())
+//              .position(account.getPosition())
+//              .email(account.getEmail())
+//              .name(account.getName())
+//              .scheduleId(scheduleId)
+//              .JWTToken(token)
+//              .build();
+      Schedule schedule = nearSchedule(account.getSchedules());
+      return new ResponseEntity<>(AccountLoginResponseDTO.from(account,schedule,token), HttpStatus.OK);
 
     } catch (AuthenticationException e) {
       throw new BadCredentialsException("로그인에 실패하셨습니다");
     } catch (Exception e) {
       throw new RuntimeException(e);
     }
+  }
+  private Schedule nearSchedule(List<Schedule> scheduleList){
+    LocalDateTime now = LocalDateTime.now();
+    int count = -1 , count2=Integer.MAX_VALUE;
+    for (Schedule i:scheduleList) {
+        if(count2 <(int) ChronoUnit.DAYS.between(i.getStartDate(),now)){
+        break;
+        }
+        count2=(int) ChronoUnit.DAYS.between(i.getStartDate(),now);
+        count++;
+    }
+    return scheduleList.get(count);
   }
 
   public ResponseDto modify(AccountModifyRequestDTO accountModifyRequestDTO) throws Exception {
