@@ -17,8 +17,8 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class AccountLoginResponseDTO {
     private UserData user;
-    private List<ScheduleData> schedules;
-    private String JWTToken;
+    private ScheduleData schedule;
+    private String accessToken;
     @Getter
     @Setter
     public static class UserData {
@@ -77,11 +77,11 @@ public class AccountLoginResponseDTO {
         }
     }
 
-    public static AccountLoginResponseDTO from( Account account,String jwtToken) throws Exception {
+    public static AccountLoginResponseDTO from( Account account,Schedule schedule,String accessToken) throws Exception {
         return AccountLoginResponseDTO.builder()
                 .user(new UserData(account))
-                .JWTToken(jwtToken)
-                .schedules(account.getSchedules().stream().map(ScheduleData::new).collect(Collectors.toList()))
+                .accessToken(accessToken)
+                .schedule(new ScheduleData(schedule))
                 .build();
     }
 }
