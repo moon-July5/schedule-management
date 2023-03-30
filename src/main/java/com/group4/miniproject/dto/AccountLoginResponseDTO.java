@@ -27,7 +27,7 @@ public class AccountLoginResponseDTO {
 
         private String accountId;
 
-        private Set<AccountRole> role;
+        private AccountRole role;
 
         private String email;
 
@@ -43,7 +43,7 @@ public class AccountLoginResponseDTO {
             this.id = a.getId();
             this.name = a.getName();
             this.accountId = a.getAccountId();
-            this.role = a.getRoles();
+            this.role = a.getRoles().iterator().next();
             this.email = a.getEmail();
             this.department = a.getDepartment();
             this.position = a.getPosition();
