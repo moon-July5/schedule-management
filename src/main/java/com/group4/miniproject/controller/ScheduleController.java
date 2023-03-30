@@ -5,6 +5,7 @@ import com.group4.miniproject.annotation.AuthCheck;
 import com.group4.miniproject.annotation.BindingCheck;
 import com.group4.miniproject.dto.PrincipalDto;
 import com.group4.miniproject.dto.ScheduleRequestDto;
+import com.group4.miniproject.dto.ScheduleTodayRequestDTO;
 import com.group4.miniproject.service.ScheduleService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -64,6 +65,13 @@ public class ScheduleController {
         boolean result = scheduleService.deleteSchedule(id, principal);
 
         return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+
+    @GetMapping("/today-duty")
+    public ResponseEntity<?> todayDuty(@RequestBody ScheduleTodayRequestDTO scheduleTodayRequestDTO){
+        return new ResponseEntity<>(scheduleService.getTodayDuty(scheduleTodayRequestDTO),HttpStatus.OK);
+
     }
 
 }

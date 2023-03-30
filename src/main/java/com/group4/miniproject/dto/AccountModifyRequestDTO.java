@@ -11,9 +11,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class AccountModifyRequestDTO {
 
-    String accountId ;
-    String email;
-    String password ;
-    String newPassword;
+    private String accountId ;
+    private String email;
+    private String password ;
+    private String newPassword;
 }
 //{id:1, accountId’test2’, password:’’12345, name:’’홍길동’, role:’ROLE_USER’

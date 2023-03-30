@@ -80,7 +80,8 @@ public class SecurityConfig {
                         "/user/profile/view/**",
                         "/auth/regenerateToken",
                         "/favicon.ico",
-                        "/account/delete/accountId"
+                        "/account/delete/accountId",
+                        "/schedule/today-duty"
                 ).permitAll() // 인증제외할 url등록
                 .anyRequest().authenticated()
                 .and()

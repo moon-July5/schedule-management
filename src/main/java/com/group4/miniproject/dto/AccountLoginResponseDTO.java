@@ -12,25 +12,25 @@ import java.util.Set;
 @Getter
 @Builder
 public class AccountLoginResponseDTO {
-    String name;
+    private String name;
 
-    String accountId;
+    private String accountId;
 
-    Set<AccountRole> accountRole;
+    private Set<AccountRole> accountRole;
 
-    String email;
+    private String email;
 
-    String department;
+    private String department;
 
-    String position;
+    private String position;
 
-    Long yearly;
+    private Long yearly;
 
     boolean duty;
 
-    List<Long> scheduleId ;
+    private List<Long> scheduleId ;
 
-    String JWTToken;
+    private String JWTToken;
 
 }
 /*
