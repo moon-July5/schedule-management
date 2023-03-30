@@ -192,8 +192,8 @@ class ScheduleControllerTest {
     @Test
     public void todayDutyControllerTest() throws Exception {
         ScheduleTodayRequestDTO scheduleTodayRequestDTO = ScheduleTodayRequestDTO.builder()
-                .end_date(LocalDateTime.of(2023,04,05,01,00,00))
-                .start_date(LocalDateTime.of(2023,04,05,01,00,00))
+                .end_date(LocalDateTime.of(2023,04,07,01,00,00))
+                .start_date(LocalDateTime.of(2023,04,07,01,00,00))
                 .build();
 
         mockMvc.perform(get("/schedule/today-duty")
