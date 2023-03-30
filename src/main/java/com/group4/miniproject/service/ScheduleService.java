@@ -2,6 +2,7 @@ package com.group4.miniproject.service;
 
 import com.group4.miniproject.domain.Account;
 import com.group4.miniproject.domain.Schedule;
+import com.group4.miniproject.domain.ScheduleType;
 import com.group4.miniproject.dto.*;
 import com.group4.miniproject.util.Encrypt256;
 import com.group4.miniproject.repository.AccountRepository;
@@ -169,6 +170,7 @@ public class ScheduleService {
         List<Account> accountList = new ArrayList<>();
         for (Schedule i:scheduleList) {
             if(checkToday(i.getStartDate(),i.getEndDate(),today)){
+                if(i.getType().equals(ScheduleType.DUTY))
                 accountList.add(accountRepository.findById(i.getAccount().getId()).get());
             }
         }
