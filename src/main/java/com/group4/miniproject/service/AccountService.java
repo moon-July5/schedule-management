@@ -117,27 +117,27 @@ public class AccountService {
         successLogin.setClientIp(HttpReqRespUtils.getClientIpAddressIfServletRequestExist());
       }
       successLoginRepository.save(successLogin);
-      List<Long> scheduleId = new ArrayList<>();
-      for (Schedule i:account.getSchedules()) {
-            scheduleId.add(i.getId());
-      }
+//      List<Long> scheduleId = new ArrayList<>();
+//      for (Schedule i:account.getSchedules()) {
+//            scheduleId.add(i.getId());
+//      }
 
       System.out.println("accountRequestDTO.getAccountId()" + accountRequestDTO.getAccountId());
       String token = jwtTokenProvider.generateAccessToken(authentication); // 토큰생성
-      AccountLoginResponseDTO accountLoginResponseDTO= AccountLoginResponseDTO.builder()
-              .accountRole(account.getRoles())
-              .accountId(account.getAccountId())
-              .yearly(account.getYearly())
-              .duty(account.getDuty())
-              .department(account.getDepartment())
-              .position(account.getPosition())
-              .email(account.getEmail())
-              .name(account.getName())
-              .scheduleId(scheduleId)
-              .JWTToken(token)
-              .build();
+//      AccountLoginResponseDTO accountLoginResponseDTO= AccountLoginResponseDTO.builder()
+//              .accountRole(account.getRoles())
+//              .accountId(account.getAccountId())
+//              .yearly(account.getYearly())
+//              .duty(account.getDuty())
+//              .department(account.getDepartment())
+//              .position(account.getPosition())
+//              .email(account.getEmail())
+//              .name(account.getName())
+//              .scheduleId(scheduleId)
+//              .JWTToken(token)
+//              .build();
 
-      return new ResponseEntity<>(accountLoginResponseDTO, HttpStatus.OK);
+      return new ResponseEntity<>(AccountLoginResponseDTO.from(account,token), HttpStatus.OK);
 
     } catch (AuthenticationException e) {
       throw new BadCredentialsException("로그인에 실패하셨습니다");
