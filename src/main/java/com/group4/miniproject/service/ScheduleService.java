@@ -31,6 +31,17 @@ public class ScheduleService {
 
     private Encrypt256 encrypt256 = new Encrypt256();
 
+    // 전체 일정 조회
+    public List<ScheduleAllResponseDto> getAllSchedules(){
+        List<Schedule> schedules = scheduleRepository.findAll();
+        List<ScheduleAllResponseDto> result = new ArrayList<>();
+
+        for(Schedule s : schedules)
+            result.add(new ScheduleAllResponseDto(s));
+
+        return result;
+    }
+
     // 개인 연차/당직 조회
     public ScheduleResponseDto getSchedulesById(Long id) throws Exception {
         Account account = accountRepository.findById(id)

@@ -40,6 +40,15 @@ class ScheduleControllerTest {
 
     @Autowired private ScheduleRepository scheduleRepository;
 
+    @DisplayName("연차/당직 전체 조회 테스트")
+    //@WithUserDetails("user2")
+    @Test
+    public void getAllScheduleTest1() throws Exception {
+        mockMvc.perform(get("/schedule/all"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andDo(print());
+    }
     @DisplayName("연차/당직 개인 조회 테스트")
     @WithUserDetails("user2")
     @Test

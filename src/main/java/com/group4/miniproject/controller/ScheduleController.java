@@ -9,6 +9,7 @@ import com.group4.miniproject.dto.ScheduleTodayRequestDTO;
 import com.group4.miniproject.service.ScheduleService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -16,11 +17,18 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+@Log4j2
 @RequiredArgsConstructor
 @RequestMapping("/schedule")
 @RestController
 public class ScheduleController {
     private final ScheduleService scheduleService;
+
+    // 전체 일정 조회
+    @GetMapping("/all")
+    public ResponseEntity<?> allSchedule(){
+        return new ResponseEntity<>(scheduleService.getAllSchedules(), HttpStatus.OK);
+    }
 
     // 등록 로직
     @AuthCheck
@@ -38,7 +46,7 @@ public class ScheduleController {
     // 유저에 따른 일정/당직 조회 로직
     @AuthCheck
     @GetMapping("/{id}")
-    public ResponseEntity<?> read(@PathVariable Long id) throws Exception {
+    public ResponseEntity<?> read(@PathVariable(required = false) Long id) throws Exception {
 
         return new ResponseEntity<>(scheduleService.getSchedulesById(id), HttpStatus.OK);
     }
