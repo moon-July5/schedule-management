@@ -66,6 +66,9 @@ public class AccountLoginResponseDTO {
         private LocalDateTime modified_at;
 
         public ScheduleData(Schedule s) {
+            if(s==null){
+                return;
+            }
             this.id = s.getId();
             this.accountId = s.getAccount().getAccountId();
             this.type = s.getType();
