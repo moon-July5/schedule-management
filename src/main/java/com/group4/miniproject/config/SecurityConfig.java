@@ -112,9 +112,8 @@ public class SecurityConfig {
 //        return (web) -> web.ignoring().requestMatchers(PathRequest.toStaticResources().atCommonLocations());
         return (web) -> web.ignoring().requestMatchers(
                 "/v3/api-docs/**",
-                "/swagger-ui/**",
-                "/schedule/**","/account/**"
-//                ,"/**" // 임시로 모든 보안 해제시 셋팅!
+                "/swagger-ui/**"
+                ,"/**" // 임시로 모든 보안 해제시 셋팅!
 
         );
     }
