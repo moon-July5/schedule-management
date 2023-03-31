@@ -29,19 +29,21 @@ public class ScheduleResponseDto {
         private Long id;
         private ScheduleType type;
         private String content;
-        private LocalDateTime startDate;
-        private LocalDateTime endDate;
-        private LocalDateTime createdAt;
-        private LocalDateTime modifiedAt;
+        private String accountId;
+        private LocalDateTime start_date;
+        private LocalDateTime end_date;
+        private LocalDateTime created_at;
+        private LocalDateTime modified_at;
 
         public ScheduleData(Schedule s) {
             this.id = s.getId();
             this.type = s.getType();
             this.content = s.getContent();
-            this.startDate = s.getStartDate();
-            this.endDate = s.getEndDate();
-            this.createdAt = s.getCreatedAt();
-            this.modifiedAt = s.getModifiedAt();
+            this.accountId = s.getAccount().getAccountId();
+            this.start_date = s.getStartDate();
+            this.end_date = s.getEndDate();
+            this.created_at = s.getCreatedAt();
+            this.modified_at = s.getModifiedAt();
         }
     }
 
