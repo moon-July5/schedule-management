@@ -26,8 +26,8 @@ public class ScheduleController {
     @AuthCheck
     @BindingCheck
     @PostMapping("/save")
-    public ResponseEntity<?> save(@RequestBody @Valid ScheduleRequestDto scheduleRequestDto,
-                                  @AuthenticationPrincipal PrincipalDto principal,
+    public ResponseEntity<?> save(@AuthenticationPrincipal PrincipalDto principal,
+                                  @RequestBody @Valid ScheduleRequestDto scheduleRequestDto,
                                   BindingResult bindingResult) throws Exception {
 
         boolean result = scheduleService.saveSchedule(scheduleRequestDto, principal);
