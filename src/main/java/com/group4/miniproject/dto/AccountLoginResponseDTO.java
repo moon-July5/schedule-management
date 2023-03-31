@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class AccountLoginResponseDTO {
     private UserData user;
-    private ScheduleData schedule;
+
     private String accessToken;
     @Getter
     @Setter
@@ -39,7 +39,8 @@ public class AccountLoginResponseDTO {
 
         boolean duty;
 
-        public UserData(Account a) {
+        private ScheduleData schedule;
+        public UserData(Account a,Schedule s) {
             this.id = a.getId();
             this.name = a.getName();
             this.accountId = a.getAccountId();
@@ -49,6 +50,7 @@ public class AccountLoginResponseDTO {
             this.position = a.getPosition();
             this.yearly = a.getYearly();
             this.duty = a.getDuty();
+            this.schedule = new ScheduleData(s);
         }
     }
 
@@ -82,9 +84,8 @@ public class AccountLoginResponseDTO {
 
     public static AccountLoginResponseDTO from( Account account,Schedule schedule,String accessToken) throws Exception {
         return AccountLoginResponseDTO.builder()
-                .user(new UserData(account))
+                .user(new UserData(account,schedule))
                 .accessToken(accessToken)
-                .schedule(new ScheduleData(schedule))
                 .build();
     }
 }
