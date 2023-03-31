@@ -1,32 +1,27 @@
 spring:
-    thymeleaf3:
-        decoupled-logic: true
-    datasource:
-        url: jdbc:mysql://localhost:3306/miniproject?useSSL=false&characterEncoding=UTF-8&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true
-        username: root
-        password: rnjs!@2804
-        driver-class-name: com.mysql.cj.jdbc.Driver
-#        driver-class-name: org.mariadb.jdbc.Driver
-#        url: jdbc:mariadb://localhost:3307/profile
-#        username:
-#        password:
-    jpa:
-        defer-datasource-initialization: true
-        open-in-view: true
-        hibernate.ddl-auto: update
-        show-sql: true
-        properties:
-            hibernate.format_sql: true
-            hibernate.default_batch_fetch_size: 100
-        generate-ddl: true
+  thymeleaf3:
+    decoupled-logic: true
+  datasource:
+    url: jdbc:mysql://miniproject.civfgcdxitth.ap-northeast-2.rds.amazonaws.com/miniproject?useSSL=false&allowPublicKeyRetrieval=true&characterEncoding=UTF-8&serverTimezone=Asia/Seoul
+    username: moon
+    password: 12345678
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    defer-datasource-initialization: true
+    open-in-view: true
+    hibernate.ddl-auto: none
+    show-sql: true
+    properties:
+      hibernate.format_sql: true
+      hibernate.default_batch_fetch_size: 100
+    generate-ddl: true
 
-    sql:
-        init:
-            mode: never
+  sql:
+    init:
+      mode: never
 
 jwt:
-    token:
-        access-token-secret-key: aG91Mjctc2ltcGxlLXNwcmluZy1ib290LWFwaS1qd3QK
-        #        1800초 : 30분
-        access-token-expire-length: 1800000
-
+  token:
+    access-token-secret-key: aG91Mjctc2ltcGxlLXNwcmluZy1ib290LWFwaS1qd3QK
+    #        1800초 : 30분
+    access-token-expire-length: 1800000
