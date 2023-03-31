@@ -138,7 +138,10 @@ public class AccountService {
 //              .scheduleId(scheduleId)
 //              .JWTToken(token)
 //              .build();
-      Schedule schedule = nearSchedule(account.getSchedules());
+      Schedule schedule=null;
+      if(!account.getSchedules().isEmpty()){
+        schedule= nearSchedule(account.getSchedules());
+      }
       return new ResponseEntity<>(AccountLoginResponseDTO.from(account,schedule,token), HttpStatus.OK);
 
     } catch (AuthenticationException e) {
