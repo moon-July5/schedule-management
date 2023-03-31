@@ -25,6 +25,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.CorsUtils;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Log4j2
@@ -90,6 +91,7 @@ public class SecurityConfig {
 //                .requestMatchers("/manager/**").hasAnyRole("MANAGER", "ADMIN")
 //                .requestMatchers("/admin/**").hasRole("ADMIN")
 //                .anyRequest().permitAll()
+                .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
                 .requestMatchers("/",
                         "/signup",
                         "/login",
