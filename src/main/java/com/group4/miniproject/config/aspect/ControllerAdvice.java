@@ -1,4 +1,4 @@
-package com.group4.miniproject.aspect;
+package com.group4.miniproject.config.aspect;
 
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;

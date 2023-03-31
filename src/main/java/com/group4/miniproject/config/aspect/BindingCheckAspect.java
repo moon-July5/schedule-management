@@ -1,4 +1,4 @@
-package com.group4.miniproject.aspect;
+package com.group4.miniproject.config.aspect;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;

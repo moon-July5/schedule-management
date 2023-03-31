@@ -1,4 +1,4 @@
-package com.group4.miniproject.aspect;
+package com.group4.miniproject.config.aspect;
 
 import com.group4.miniproject.dto.PrincipalDto;
 import org.aspectj.lang.annotation.Aspect;
