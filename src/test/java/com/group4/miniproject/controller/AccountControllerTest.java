@@ -3,10 +3,7 @@ package com.group4.miniproject.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.group4.miniproject.config.SecurityConfig;
-import com.group4.miniproject.dto.AccountDeleteDTO;
-import com.group4.miniproject.dto.AccountLoginRequestDto;
-import com.group4.miniproject.dto.AccountModifyRequestDTO;
-import com.group4.miniproject.dto.AccountRequestDTO;
+import com.group4.miniproject.dto.*;
 
 import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.DisplayName;
@@ -16,8 +13,10 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -118,6 +117,16 @@ public class AccountControllerTest {
         mvc.perform(post("/account/delete/accountId")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(accountDeleteDTO)))
+                .andDo(print());
+    }
+
+    @DisplayName("회원 검색 성공")
+    @Test
+    public void searchTest() throws Exception {
+        AccountSearchRequestDTO accountSearchRequestDTO = AccountSearchRequestDTO.builder().name("이미나").build();
+        mvc.perform(get("/account/search")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(accountSearchRequestDTO)))
                 .andDo(print());
     }
 

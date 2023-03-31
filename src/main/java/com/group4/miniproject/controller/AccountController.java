@@ -8,10 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RequestMapping("/")
@@ -44,5 +41,9 @@ public class AccountController {
     @PostMapping("/account/delete/{accountId}")
     public ResponseEntity<?> delete(@RequestBody AccountDeleteDTO accountDeleteDTO) throws Exception {
         return new ResponseEntity<>(accountService.delete(accountDeleteDTO), HttpStatus.OK);
+    }
+    @GetMapping("/account/search")
+    public ResponseEntity<?> search(@RequestBody AccountSearchRequestDTO accountSearchRequestDTO) throws Exception {
+        return new ResponseEntity<>(accountService.search(accountSearchRequestDTO),HttpStatus.OK);
     }
 }
