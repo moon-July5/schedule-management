@@ -69,8 +69,8 @@ public class AccountControllerTest {
     @Test
     public void LoginTest() throws Exception {
         AccountLoginRequestDto accountLoginRequestDto = AccountLoginRequestDto.builder()
-                .accountId("accountId")
-                .password("132456789")
+                .accountId("admin")
+                .password("12345678")
                 .build();
 
         mvc.perform(post("/login")
