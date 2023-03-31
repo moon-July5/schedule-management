@@ -29,7 +29,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
    * @return
    */
   @Override
-  public UserDetails loadUserByUsername(String accountId) throws UserNotFoundException {
+  public PrincipalDto loadUserByUsername(String accountId) throws UserNotFoundException {
     System.out.println("name in loadUserByUsername = " + accountId);
     Account account = null; // db에서 유저조회
     try {
