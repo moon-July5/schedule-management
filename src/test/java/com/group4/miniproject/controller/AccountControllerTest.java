@@ -53,8 +53,8 @@ public class AccountControllerTest {
     @Test
     public void AccountControllerFailTest() throws Exception {
         AccountRequestDTO accountRequestDTO = AccountRequestDTO.builder()
-                .name("유지현")
-                .accountId("accountIs")
+                .name("유현")
+                .accountId("accountId")
                 .email("yuu@axd.com")
                 .password("132456789")
                 .build();
