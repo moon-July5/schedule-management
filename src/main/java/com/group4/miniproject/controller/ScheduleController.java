@@ -11,6 +11,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -45,6 +46,7 @@ public class ScheduleController {
     // 수정 로직
     @AuthCheck
     @BindingCheck
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
     @PostMapping("/update/{id}")
     public ResponseEntity<?> update(@PathVariable Long id,
                                     @AuthenticationPrincipal PrincipalDto principal,
@@ -58,6 +60,7 @@ public class ScheduleController {
 
     // 삭제 로직
     @AuthCheck
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
     @PostMapping("/delete/{id}")
     public ResponseEntity<?> delete(@PathVariable Long id,
                                     @AuthenticationPrincipal PrincipalDto principal){
@@ -71,7 +74,5 @@ public class ScheduleController {
     @GetMapping("/today-duty")
     public ResponseEntity<?> todayDuty(@RequestBody ScheduleTodayRequestDTO scheduleTodayRequestDTO){
         return new ResponseEntity<>(scheduleService.getTodayDuty(scheduleTodayRequestDTO),HttpStatus.OK);
-
     }
-
 }

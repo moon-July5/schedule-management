@@ -92,19 +92,9 @@ public class SecurityConfig {
 //                .requestMatchers("/admin/**").hasRole("ADMIN")
 //                .anyRequest().permitAll()
                 .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
-                .requestMatchers("/",
-                        "/signup",
-                        "/login",
-                        "/api/test/**",
-                        "/auth/signUp",
-                        "/user/userList",
-                        "/auth/signIn*",
-                        "/user/profile/view/**",
-                        "/auth/regenerateToken",
-                        "/favicon.ico",
-                        "/account/delete/accountId",
-                        "/schedule/today-duty"
-                ).permitAll() // 인증제외할 url등록
+                .requestMatchers("/", "/signup", "/login").permitAll()
+                .requestMatchers(HttpMethod.POST, "/schedule/**", "/account/**").hasAnyRole("USER","ADMIN")
+                .requestMatchers(HttpMethod.GET, "/schedule/admin/**", "/account/admin/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
                 .and()
                 .addFilterBefore(new JwtTokenFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
