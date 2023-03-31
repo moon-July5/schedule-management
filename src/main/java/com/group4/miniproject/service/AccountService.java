@@ -201,6 +201,10 @@ public class AccountService {
     return new ResponseDto("success","삭제완료");
     //  로그인 기능 쪽에  isdelete true면 로그인 불가 ?.
   }
+  public AccountSearchResponseDTO search(AccountSearchRequestDTO accountSearchRequestDTO) throws Exception {
+    Optional<Account> account = accountRepository.findByName(accountSearchRequestDTO.getName());
+    return AccountSearchResponseDTO.from(account.get());
+  }
 
   // 테스트 용
   public String register(String name, String email,String department, String position) throws Exception {

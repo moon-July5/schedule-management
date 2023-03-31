@@ -43,8 +43,9 @@ public class AccountController {
         return new ResponseEntity<>(accountService.delete(accountDeleteDTO), HttpStatus.OK);
     }
 
-//    @GetMapping("/account/search")
-//    public ResponseEntity<?> search(@PathVariable String name){
-////        return new ResponseEntity<>(accountService.search(name),HttpStatus.OK);
-//    }
+    @GetMapping("/account/search")
+    public ResponseEntity<?> search(@RequestBody AccountSearchRequestDTO accountSearchRequestDTO) throws Exception {
+        return new ResponseEntity<>(accountService.search(accountSearchRequestDTO),HttpStatus.OK);
+    }
+
 }
