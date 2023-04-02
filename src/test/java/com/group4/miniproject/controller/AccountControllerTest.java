@@ -31,7 +31,7 @@ public class AccountControllerTest {
     @Autowired
     private MockMvc mvc;
 
-    @WithUserDetails("user2")
+    @WithUserDetails("admin")
     @DisplayName("회원 권한 변경")
     @Test
     public void SetAccountRoleTest1() throws Exception {
@@ -44,7 +44,7 @@ public class AccountControllerTest {
                 .andDo(print());
     }
 
-    @WithUserDetails("user1")
+    @WithUserDetails("admin")
     @DisplayName("회원 일정 정보 검색")
     @Test
     public void AccountScheduleInfoSearchTest1() throws Exception {

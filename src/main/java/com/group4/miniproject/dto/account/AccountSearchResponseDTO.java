@@ -1,6 +1,7 @@
 package com.group4.miniproject.dto.account;
 
 import com.group4.miniproject.domain.Account;
+import com.group4.miniproject.domain.AccountRole;
 import com.group4.miniproject.domain.Schedule;
 import com.group4.miniproject.domain.ScheduleType;
 import com.group4.miniproject.dto.schedule.ScheduleResponseDto;
@@ -22,6 +23,11 @@ public class AccountSearchResponseDTO {
     private String name;
     private String department;
     private String position;
+    private AccountRole role;
+    private String email;
+    private Long yearly;
+    private boolean duty;
+
     private List<ScheduleResponseDto.ScheduleData> schedules;
 
     @Getter
@@ -46,13 +52,17 @@ public class AccountSearchResponseDTO {
         }
     }
 
-    public static AccountSearchResponseDTO from( Account account) throws Exception {
+    public static AccountSearchResponseDTO from(Account account) throws Exception {
         return AccountSearchResponseDTO.builder()
                 .id(account.getId())
                 .accountId(account.getAccountId())
                 .name(account.getName())
                 .department(account.getDepartment())
                 .position(account.getPosition())
+                .role(account.getRoles().iterator().next())
+                .email(account.getEmail())
+                .yearly(account.getYearly())
+                .duty(account.getDuty())
                 .schedules(account.getSchedules().stream().map(ScheduleResponseDto.ScheduleData::new).collect(Collectors.toList()))
                 .build();
     }
