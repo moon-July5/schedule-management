@@ -1,4 +1,4 @@
-package com.group4.miniproject.dto;
+package com.group4.miniproject.dto.account;
 
 import com.group4.miniproject.domain.Account;
 import com.group4.miniproject.domain.AccountRole;
@@ -7,9 +7,6 @@ import com.group4.miniproject.domain.ScheduleType;
 import lombok.*;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Builder
 @Data

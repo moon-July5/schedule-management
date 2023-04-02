@@ -4,9 +4,11 @@ import com.group4.miniproject.domain.Account;
 import com.group4.miniproject.domain.Schedule;
 import com.group4.miniproject.domain.SuccessLogin;
 import com.group4.miniproject.dto.*;
+import com.group4.miniproject.dto.account.*;
 import com.group4.miniproject.jwt.JwtTokenProvider;
 import com.group4.miniproject.repository.AccountRepository;
 import com.group4.miniproject.repository.SuccessLoginRepository;
+import com.group4.miniproject.util.Encrypt256;
 import com.group4.miniproject.util.HttpReqRespUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -22,12 +24,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Log4j2
 @Service
@@ -38,7 +39,7 @@ public class AccountService {
   private final JwtTokenProvider jwtTokenProvider;
   private final AuthenticationManager authenticationManager;
   private final SuccessLoginRepository successLoginRepository;
-
+  private Encrypt256 encrypt256 = new Encrypt256();
 
   @Transactional
   public AccountResponseDTO signUp(AccountRequestDTO accountRequestDTO) throws Exception {
@@ -201,9 +202,11 @@ public class AccountService {
     return new ResponseDto("success","삭제완료");
     //  로그인 기능 쪽에  isdelete true면 로그인 불가 ?.
   }
-  public AccountSearchResponseDTO search(AccountSearchRequestDTO accountSearchRequestDTO) throws Exception {
-    Optional<Account> account = accountRepository.findByName(accountSearchRequestDTO.getName());
-    return AccountSearchResponseDTO.from(account.get());
+  public List<AccountSearchInfoResponseDTO> getAllUserInfo(String name) {
+    List<Account> accounts = name!=null ? accountRepository.findByNameContainingIgnoreCase(encrypt256.convertToDatabaseColumn(name)) :
+            accountRepository.findAll();
+
+    return accounts.stream().map(account -> AccountSearchInfoResponseDTO.from(account)).collect(Collectors.toList());
   }
 
   // 테스트 용

@@ -1,12 +1,11 @@
 package com.group4.miniproject.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.group4.miniproject.config.SecurityConfig;
 import com.group4.miniproject.domain.Schedule;
 import com.group4.miniproject.domain.ScheduleType;
-import com.group4.miniproject.dto.ScheduleRequestDto;
-import com.group4.miniproject.dto.ScheduleTodayRequestDTO;
+import com.group4.miniproject.dto.schedule.ScheduleRequestDto;
+import com.group4.miniproject.dto.schedule.ScheduleTodayRequestDTO;
 import com.group4.miniproject.repository.ScheduleRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -23,7 +22,6 @@ import java.time.LocalDateTime;
 import java.time.Period;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;

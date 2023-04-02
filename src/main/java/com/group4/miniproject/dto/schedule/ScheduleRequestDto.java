@@ -1,7 +1,8 @@
-package com.group4.miniproject.dto;
+package com.group4.miniproject.dto.schedule;
 
 import com.group4.miniproject.domain.Schedule;
 import com.group4.miniproject.domain.ScheduleType;
+import com.group4.miniproject.dto.PrincipalDto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;

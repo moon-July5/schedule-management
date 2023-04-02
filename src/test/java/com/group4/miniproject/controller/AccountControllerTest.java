@@ -1,10 +1,9 @@
 package com.group4.miniproject.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.group4.miniproject.config.SecurityConfig;
-import com.group4.miniproject.dto.*;
 
+import com.group4.miniproject.dto.account.*;
 import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,7 +12,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
-import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -30,6 +29,15 @@ public class AccountControllerTest {
     private ObjectMapper mapper;
     @Autowired
     private MockMvc mvc;
+
+    @WithUserDetails("admin")
+    @DisplayName("회원 검색")
+    @Test
+    public void AccountSearchTest1() throws Exception {
+        mvc.perform(get("/account/admin/search?name=김고수"))
+                .andExpect(status().isOk())
+                .andDo(print());
+    }
 
     @DisplayName("회원가입 성공")
     @Test

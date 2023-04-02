@@ -1,4 +1,4 @@
-package com.group4.miniproject.dto;
+package com.group4.miniproject.dto.account;
 
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;

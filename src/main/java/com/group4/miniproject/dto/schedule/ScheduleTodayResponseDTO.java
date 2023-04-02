@@ -1,4 +1,4 @@
-package com.group4.miniproject.dto;
+package com.group4.miniproject.dto.schedule;
 
 import com.group4.miniproject.domain.Account;
 import lombok.AllArgsConstructor;

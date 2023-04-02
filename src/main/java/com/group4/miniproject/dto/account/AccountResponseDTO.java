@@ -1,4 +1,4 @@
-package com.group4.miniproject.dto;
+package com.group4.miniproject.dto.account;
 
 import lombok.Builder;
 import lombok.Getter;

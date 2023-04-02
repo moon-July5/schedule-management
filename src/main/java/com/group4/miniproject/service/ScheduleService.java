@@ -4,6 +4,7 @@ import com.group4.miniproject.domain.Account;
 import com.group4.miniproject.domain.Schedule;
 import com.group4.miniproject.domain.ScheduleType;
 import com.group4.miniproject.dto.*;
+import com.group4.miniproject.dto.schedule.*;
 import com.group4.miniproject.util.Encrypt256;
 import com.group4.miniproject.repository.AccountRepository;
 import com.group4.miniproject.repository.ScheduleRepository;
@@ -28,8 +29,6 @@ import java.util.Optional;
 public class ScheduleService {
     private final ScheduleRepository scheduleRepository;
     private final AccountRepository accountRepository;
-
-    private Encrypt256 encrypt256 = new Encrypt256();
 
     // 전체 일정 조회
     public List<ScheduleAllResponseDto> getAllSchedules(){

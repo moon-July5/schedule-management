@@ -1,8 +1,9 @@
-package com.group4.miniproject.dto;
+package com.group4.miniproject.dto.account;
 
 import com.group4.miniproject.domain.Account;
 import com.group4.miniproject.domain.Schedule;
 import com.group4.miniproject.domain.ScheduleType;
+import com.group4.miniproject.dto.schedule.ScheduleResponseDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;

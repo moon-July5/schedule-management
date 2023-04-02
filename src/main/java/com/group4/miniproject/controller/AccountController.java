@@ -1,7 +1,7 @@
 package com.group4.miniproject.controller;
 
 import com.group4.miniproject.annotation.BindingCheck;
-import com.group4.miniproject.dto.*;
+import com.group4.miniproject.dto.account.*;
 import com.group4.miniproject.service.AccountService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +27,7 @@ public class AccountController {
     @BindingCheck
     @PostMapping("/login")
     public ResponseEntity<AccountLoginResponseDTO> signIn(@RequestBody @Valid AccountLoginRequestDto accountRequestDTO,
-                                              BindingResult bindingResult) {
+                                                          BindingResult bindingResult) {
         return accountService.signIn(accountRequestDTO);
     }
 
@@ -42,10 +42,9 @@ public class AccountController {
     public ResponseEntity<?> delete(@RequestBody AccountDeleteDTO accountDeleteDTO) throws Exception {
         return new ResponseEntity<>(accountService.delete(accountDeleteDTO), HttpStatus.OK);
     }
-
-    @GetMapping("/account/search")
-    public ResponseEntity<?> search(@RequestBody AccountSearchRequestDTO accountSearchRequestDTO) throws Exception {
-        return new ResponseEntity<>(accountService.search(accountSearchRequestDTO),HttpStatus.OK);
+    @GetMapping("/account/admin/search")
+    public ResponseEntity<?> search(@RequestParam(required = false) String name) throws Exception {
+        return new ResponseEntity<>(accountService.getAllUserInfo(name) ,HttpStatus.OK);
     }
 
 }
