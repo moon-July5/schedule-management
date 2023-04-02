@@ -43,8 +43,13 @@ public class AccountController {
         return new ResponseEntity<>(accountService.delete(accountDeleteDTO), HttpStatus.OK);
     }
     @GetMapping("/account/admin/search")
-    public ResponseEntity<?> search(@RequestParam(required = false) String name) throws Exception {
+    public ResponseEntity<?> getAccountInfo(@RequestParam(required = false) String name) throws Exception {
         return new ResponseEntity<>(accountService.getAllUserInfo(name) ,HttpStatus.OK);
     }
 
+    @GetMapping("/account/admin/{id}")
+    public ResponseEntity<?> getAccountScheduleInfo(@PathVariable Long id) throws Exception {
+
+        return new ResponseEntity<>(accountService.getAccountScheduleInfo(id), HttpStatus.OK);
+    }
 }

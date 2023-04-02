@@ -31,7 +31,16 @@ public class AccountControllerTest {
     private MockMvc mvc;
 
     @WithUserDetails("admin")
-    @DisplayName("회원 검색")
+    @DisplayName("회원 일정 정보 검색")
+    @Test
+    public void AccountScheduleInfoSearchTest1() throws Exception {
+        mvc.perform(get("/account/admin/2"))
+                .andExpect(status().isOk())
+                .andDo(print());
+    }
+
+    @WithUserDetails("admin")
+    @DisplayName("이름으로 회원 검색")
     @Test
     public void AccountSearchTest1() throws Exception {
         mvc.perform(get("/account/admin/search?name=김고수"))
@@ -128,7 +137,7 @@ public class AccountControllerTest {
                 .andDo(print());
     }
 
-    @DisplayName("회원 검색 성공")
+/*    @DisplayName("회원 검색 성공")
     @Test
     public void searchTest() throws Exception {
         AccountSearchRequestDTO accountSearchRequestDTO = AccountSearchRequestDTO.builder().name("이미나").build();
@@ -136,6 +145,6 @@ public class AccountControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(accountSearchRequestDTO)))
                 .andDo(print());
-    }
+    }*/
 
 }

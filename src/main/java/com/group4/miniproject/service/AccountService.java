@@ -10,6 +10,7 @@ import com.group4.miniproject.repository.AccountRepository;
 import com.group4.miniproject.repository.SuccessLoginRepository;
 import com.group4.miniproject.util.Encrypt256;
 import com.group4.miniproject.util.HttpReqRespUtils;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
@@ -207,6 +208,13 @@ public class AccountService {
             accountRepository.findAll();
 
     return accounts.stream().map(account -> AccountSearchInfoResponseDTO.from(account)).collect(Collectors.toList());
+  }
+
+  public AccountSearchResponseDTO getAccountScheduleInfo(Long id) throws Exception {
+    Account account = accountRepository.findById(id)
+            .orElseThrow(() -> new EntityNotFoundException("유효하지 않은 id 입니다."));
+
+    return AccountSearchResponseDTO.from(account);
   }
 
   // 테스트 용
