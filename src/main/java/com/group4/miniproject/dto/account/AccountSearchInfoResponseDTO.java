@@ -1,10 +1,14 @@
 package com.group4.miniproject.dto.account;
 
 import com.group4.miniproject.domain.Account;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Getter
 public class AccountSearchInfoResponseDTO {
     private Long id;

@@ -3,6 +3,7 @@ package com.group4.miniproject.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.group4.miniproject.config.SecurityConfig;
 
+import com.group4.miniproject.domain.AccountRole;
 import com.group4.miniproject.dto.account.*;
 import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.DisplayName;
@@ -30,7 +31,20 @@ public class AccountControllerTest {
     @Autowired
     private MockMvc mvc;
 
-    @WithUserDetails("admin")
+    @WithUserDetails("user2")
+    @DisplayName("회원 권한 변경")
+    @Test
+    public void SetAccountRoleTest1() throws Exception {
+        AccountRoleRequestDTO dto = AccountRoleRequestDTO.builder().role(AccountRole.ROLE_USER).build();
+
+        mvc.perform(post("/account/admin/role/2")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(dto)))
+                .andExpect(status().isOk())
+                .andDo(print());
+    }
+
+    @WithUserDetails("user1")
     @DisplayName("회원 일정 정보 검색")
     @Test
     public void AccountScheduleInfoSearchTest1() throws Exception {

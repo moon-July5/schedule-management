@@ -1,6 +1,7 @@
 package com.group4.miniproject.service;
 
 import com.group4.miniproject.domain.Account;
+import com.group4.miniproject.domain.AccountRole;
 import com.group4.miniproject.domain.Schedule;
 import com.group4.miniproject.domain.SuccessLogin;
 import com.group4.miniproject.dto.*;
@@ -27,8 +28,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Log4j2
@@ -215,6 +218,20 @@ public class AccountService {
             .orElseThrow(() -> new EntityNotFoundException("유효하지 않은 id 입니다."));
 
     return AccountSearchResponseDTO.from(account);
+  }
+
+  public ResponseDto setAccountRole(Long id, AccountRoleRequestDTO dto){
+    Account account = accountRepository.findById(id)
+            .orElseThrow(() -> new EntityNotFoundException("유효하지 않은 id 입니다."));
+
+    Set<AccountRole> roles = new HashSet<>();
+    roles.add(dto.getRole());
+
+    account.setRoles(roles);
+
+    accountRepository.save(account);
+
+    return new ResponseDto("success","수정 완료");
   }
 
   // 테스트 용

@@ -52,4 +52,11 @@ public class AccountController {
 
         return new ResponseEntity<>(accountService.getAccountScheduleInfo(id), HttpStatus.OK);
     }
+
+    @PostMapping("/account/admin/role/{id}")
+    public ResponseEntity<?> setAccountRole(@PathVariable Long id, @RequestBody AccountRoleRequestDTO accountRoleRequestDTO){
+
+        return new ResponseEntity<>(accountService.setAccountRole(id, accountRoleRequestDTO), HttpStatus.OK);
+    }
+
 }
