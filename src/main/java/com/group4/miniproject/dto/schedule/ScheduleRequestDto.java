@@ -18,10 +18,10 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class ScheduleRequestDto {
     @NotNull(message = "날짜를 선택해 주세요.")
-    private LocalDateTime startDate;
+    private LocalDateTime start_date;
 
     @NotNull(message = "날짜를 선택해 주세요.")
-    private LocalDateTime endDate;
+    private LocalDateTime end_date;
 
     private ScheduleType scheduleType;
 
@@ -29,8 +29,8 @@ public class ScheduleRequestDto {
 
     public Schedule toEntity(PrincipalDto dto) {
         return Schedule.builder()
-                .startDate(startDate)
-                .endDate(endDate)
+                .startDate(start_date)
+                .endDate(end_date)
                 .type(scheduleType)
                 .content(content)
                 .account(dto.toEntity())

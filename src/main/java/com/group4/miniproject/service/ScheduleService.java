@@ -35,7 +35,9 @@ public class ScheduleService {
         List<Account> accountList =accountRepository.findAll();
         List<ScheduleResponseDto> result = new ArrayList<>();
         for(Account a : accountList) {
-            result.add(ScheduleResponseDto.from(a));
+            if(!a.getSchedules().isEmpty()) {
+                result.add(ScheduleResponseDto.from(a));
+            }
         }
 
         return ScheduleAllResponseDto.builder().users(result).build();
@@ -118,12 +120,12 @@ public class ScheduleService {
             }
         }
 
-        if(!schedule.getStartDate().equals(scheduleRequestDto.getStartDate())){
-            schedule.setStartDate(scheduleRequestDto.getStartDate());
+        if(!schedule.getStartDate().equals(scheduleRequestDto.getStart_date())){
+            schedule.setStartDate(scheduleRequestDto.getStart_date());
         }
 
-        if(!schedule.getEndDate().equals(scheduleRequestDto.getEndDate())){
-            schedule.setEndDate(scheduleRequestDto.getEndDate());
+        if(!schedule.getEndDate().equals(scheduleRequestDto.getEnd_date())){
+            schedule.setEndDate(scheduleRequestDto.getEnd_date());
         }
 
         if(scheduleRequestDto.getScheduleType().getType().equals("PLAN")){
@@ -165,8 +167,8 @@ public class ScheduleService {
 
     // 날짜 차이 계산
     public int diff(ScheduleRequestDto dto){
-        LocalDateTime start = dto.getStartDate().toLocalDate().atStartOfDay();
-        LocalDateTime end = dto.getEndDate().toLocalDate().atStartOfDay();
+        LocalDateTime start = dto.getStart_date().toLocalDate().atStartOfDay();
+        LocalDateTime end = dto.getEnd_date().toLocalDate().atStartOfDay();
 
         Period diff = Period.between(start.toLocalDate(), end.toLocalDate());
 

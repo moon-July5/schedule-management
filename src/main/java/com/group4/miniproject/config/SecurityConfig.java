@@ -92,7 +92,7 @@ public class SecurityConfig {
 //                .requestMatchers("/admin/**").hasRole("ADMIN")
 //                .anyRequest().permitAll()
                 .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
-                .requestMatchers("/", "/signup", "/login").permitAll()
+                .requestMatchers("/", "/signup", "/login","/schedule/all").permitAll()
                 .requestMatchers("/schedule/admin/**", "/account/admin/**").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.POST, "/schedule/**", "/account/**").hasAnyRole("USER","ADMIN")
                 .anyRequest().authenticated()
