@@ -5,7 +5,6 @@ import com.group4.miniproject.annotation.AuthCheck;
 import com.group4.miniproject.annotation.BindingCheck;
 import com.group4.miniproject.dto.PrincipalDto;
 import com.group4.miniproject.dto.schedule.ScheduleRequestDto;
-import com.group4.miniproject.dto.schedule.ScheduleTodayRequestDTO;
 import com.group4.miniproject.service.ScheduleService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +15,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
 
 @Log4j2
 @RequiredArgsConstructor
@@ -79,9 +80,9 @@ public class ScheduleController {
     }
 
 
-    
+
     @GetMapping("/today-duty")
-    public ResponseEntity<?> todayDuty(@RequestBody ScheduleTodayRequestDTO scheduleTodayRequestDTO){
-        return new ResponseEntity<>(scheduleService.getTodayDuty(scheduleTodayRequestDTO),HttpStatus.OK);
+    public ResponseEntity<?> todayDuty(@RequestParam LocalDate start_date){
+        return new ResponseEntity<>(scheduleService.getTodayDuty(start_date),HttpStatus.OK);
     }
 }

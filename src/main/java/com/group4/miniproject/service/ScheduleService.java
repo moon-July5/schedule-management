@@ -179,21 +179,20 @@ public class ScheduleService {
 
     }
 
-    public List<ScheduleTodayResponseDTO> getTodayDuty(ScheduleTodayRequestDTO scheduleTodayRequestDTO){
-        LocalDate today = scheduleTodayRequestDTO.getStart_date();
+    public List<ScheduleTodayResponseDTO> getTodayDuty(LocalDate start_date) {
         List<Schedule> scheduleList = scheduleRepository.findAll();
         List<Account> accountList = new ArrayList<>();
-        for (Schedule i:scheduleList) {
-            if(checkToday(i.getStartDate().toLocalDate(),i.getEndDate().toLocalDate(),today)){
-                if(i.getType().equals(ScheduleType.DUTY))
-                accountList.add(accountRepository.findById(i.getAccount().getId()).get());
+        for (Schedule i : scheduleList) {
+            if (checkToday(i.getStartDate().toLocalDate(), i.getEndDate().toLocalDate(), start_date)) {
+                if (i.getType().equals(ScheduleType.DUTY))
+                    accountList.add(accountRepository.findById(i.getAccount().getId()).get());
             }
         }
         List<ScheduleTodayResponseDTO> resultList = new ArrayList<>();
-        if(accountList.isEmpty()){
+        if (accountList.isEmpty()) {
             throw new IllegalArgumentException("당직이 존재하지 않습니다.");
         }
-        for (Account i:accountList) {
+        for (Account i : accountList) {
             resultList.add(
                     new ScheduleTodayResponseDTO().builder()
                             .name(i.getName())
