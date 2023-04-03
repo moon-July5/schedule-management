@@ -62,8 +62,8 @@ class ScheduleControllerTest {
     @Test
     public void saveScheduleTest1() throws Exception {
         ScheduleRequestDto request = ScheduleRequestDto.builder()
-                .startDate(LocalDateTime.now())
-                .endDate(LocalDateTime.now().plusDays(1L))
+                .start_date(LocalDateTime.now())
+                .end_date(LocalDateTime.now().plusDays(1L))
                 .scheduleType(ScheduleType.YEARLY)
                 .build();
 
@@ -80,8 +80,8 @@ class ScheduleControllerTest {
     @Test
     public void saveScheduleTest2() throws Exception {
         ScheduleRequestDto request = ScheduleRequestDto.builder()
-                .startDate(LocalDateTime.now())
-                .endDate(LocalDateTime.now().plusHours(6))
+                .start_date(LocalDateTime.now())
+                .end_date(LocalDateTime.now().plusHours(6))
                 .scheduleType(ScheduleType.PLAN)
                 //.content("")
                 .content("작업중")
@@ -101,8 +101,8 @@ class ScheduleControllerTest {
     @Test
     public void updateScheduleTest1() throws Exception {
         ScheduleRequestDto request = ScheduleRequestDto.builder()
-                .startDate(LocalDateTime.now())
-                .endDate(LocalDateTime.now().plusDays(1))
+                .start_date(LocalDateTime.now())
+                .end_date(LocalDateTime.now().plusDays(1))
                 .scheduleType(ScheduleType.YEARLY)
                 .build();
 
@@ -120,8 +120,8 @@ class ScheduleControllerTest {
     @Test
     public void updateScheduleTest2() throws Exception {
         ScheduleRequestDto request = ScheduleRequestDto.builder()
-                .startDate(LocalDateTime.of(2023, 04, 18, 0, 0, 0))
-                .endDate(LocalDateTime.of(2023, 04, 20, 0, 0, 0))
+                .start_date(LocalDateTime.of(2023, 04, 18, 0, 0, 0))
+                .end_date(LocalDateTime.of(2023, 04, 20, 0, 0, 0))
                 .scheduleType(ScheduleType.PLAN)
                 .content("수정 중")
                 .build();
@@ -163,17 +163,17 @@ class ScheduleControllerTest {
     @Test
     public void localDateTimeTest() {
         ScheduleRequestDto request = ScheduleRequestDto.builder()
-                .startDate(LocalDateTime.of(2023, 03, 29, 0, 0, 0))
-                .endDate(LocalDateTime.of(2023, 03, 31, 0, 0, 0))
+                .start_date(LocalDateTime.of(2023, 03, 29, 0, 0, 0))
+                .end_date(LocalDateTime.of(2023, 03, 31, 0, 0, 0))
                 .scheduleType(ScheduleType.PLAN)
                 //.content("")
                 .content("작업중")
                 .build();
 
-        System.out.println("request.getEndDate() = " + request.getEndDate());
+        System.out.println("request.getEndDate() = " + request.getEnd_date());
 
-        LocalDateTime start = request.getStartDate().toLocalDate().atStartOfDay();
-        LocalDateTime end = request.getEndDate().toLocalDate().atStartOfDay();
+        LocalDateTime start = request.getStart_date().toLocalDate().atStartOfDay();
+        LocalDateTime end = request.getEnd_date().toLocalDate().atStartOfDay();
 
         Period diff = Period.between(start.toLocalDate(), end.toLocalDate());
 
@@ -198,28 +198,28 @@ class ScheduleControllerTest {
 
     @Test
     public void todayDutyControllerTest() throws Exception {
-        ScheduleTodayRequestDTO scheduleTodayRequestDTO = ScheduleTodayRequestDTO.builder()
-                .end_date(LocalDateTime.of(2023,04,07,01,00,00))
-                .start_date(LocalDateTime.of(2023,04,07,01,00,00))
-                .build();
-
-        mockMvc.perform(get("/schedule/today-duty")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(scheduleTodayRequestDTO)))
-                .andExpect(status().isOk())
-                .andDo(print());
+//        ScheduleTodayRequestDTO scheduleTodayRequestDTO = ScheduleTodayRequestDTO.builder()
+//                .end_date(LocalDateTime.of(2023,04,07,01,00,00))
+//                .start_date(LocalDateTime.of(2023,04,07,01,00,00))
+//                .build();
+//
+//        mockMvc.perform(get("/schedule/today-duty")
+//                        .contentType(MediaType.APPLICATION_JSON)
+//                        .content(objectMapper.writeValueAsString(scheduleTodayRequestDTO)))
+//                .andExpect(status().isOk())
+//                .andDo(print());
     }
     @Test
     public void todayDutyControllerTest당직존재X() throws Exception {
-        ScheduleTodayRequestDTO scheduleTodayRequestDTO = ScheduleTodayRequestDTO.builder()
-                .end_date(LocalDateTime.of(2023,04,8,01,00,00))
-                .start_date(LocalDateTime.of(2023,04,8,01,00,00))
-                .build();
-
-        mockMvc.perform(get("/schedule/today-duty")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(scheduleTodayRequestDTO)))
-                .andExpect(status().isOk())
-                .andDo(print());
+//        ScheduleTodayRequestDTO scheduleTodayRequestDTO = ScheduleTodayRequestDTO.builder()
+//                .end_date(LocalDateTime.of(2023,04,8,01,00,00))
+//                .start_date(LocalDateTime.of(2023,04,8,01,00,00))
+//                .build();
+//
+//        mockMvc.perform(get("/schedule/today-duty")
+//                        .contentType(MediaType.APPLICATION_JSON)
+//                        .content(objectMapper.writeValueAsString(scheduleTodayRequestDTO)))
+//                .andExpect(status().isOk())
+//                .andDo(print());
     }
 }

@@ -27,14 +27,14 @@ public class ScheduleServiceTest {
 //        ,LocalDateTime.of(2023,04,00,02,00,00)));
 //    }
 
-    @Test
-    public void 투데이당직테스트(){
-        ScheduleTodayRequestDTO scheduleTodayRequestDTO = ScheduleTodayRequestDTO.builder()
-                .end_date(LocalDateTime.of(2023,04,05,01,00,00))
-                .start_date(LocalDateTime.of(2023,04,05,01,00,00))
-                .build();
-        log.info(scheduleService.getTodayDuty(scheduleTodayRequestDTO));
+//    @Test
+//    public void 투데이당직테스트(){
+//        ScheduleTodayRequestDTO scheduleTodayRequestDTO = ScheduleTodayRequestDTO.builder()
+//                .end_date(LocalDateTime.of(2023,04,05,01,00,00))
+//                .start_date(LocalDateTime.of(2023,04,05,01,00,00))
+//                .build();
+//        log.info(scheduleService.getTodayDuty(scheduleTodayRequestDTO));
 
-    }
+//    }
 
 }

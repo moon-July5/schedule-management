@@ -93,7 +93,7 @@ public class SecurityConfig {
 //                .anyRequest().permitAll()
                 .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
 
-                .requestMatchers("/", "/signup", "/login", "/schedule/today-duty").permitAll()
+                .requestMatchers("/", "/signup", "/login").permitAll()
 
                 .requestMatchers("/schedule/admin/**", "/account/admin/**").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.POST, "/schedule/**", "/account/**").hasAnyRole("USER","ADMIN")
@@ -114,7 +114,8 @@ public class SecurityConfig {
 //        return (web) -> web.ignoring().requestMatchers(PathRequest.toStaticResources().atCommonLocations());
         return (web) -> web.ignoring().requestMatchers(
                 "/v3/api-docs/**",
-                "/swagger-ui/**"
+                "/swagger-ui/**",
+                "/schedule/today-duty"
         );
         // "/**"  임시로 모든 보안 해제시 셋팅!
     }

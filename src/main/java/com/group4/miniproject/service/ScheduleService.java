@@ -4,6 +4,7 @@ import com.group4.miniproject.domain.Account;
 import com.group4.miniproject.domain.Schedule;
 import com.group4.miniproject.domain.ScheduleType;
 import com.group4.miniproject.dto.*;
+import com.group4.miniproject.dto.account.AccountLoginResponseDTO;
 import com.group4.miniproject.dto.schedule.*;
 import com.group4.miniproject.util.Encrypt256;
 import com.group4.miniproject.repository.AccountRepository;
@@ -33,10 +34,12 @@ public class ScheduleService {
     // 전체 일정 조회
     public ScheduleAllResponseDto getAllSchedules() throws Exception {
         List<Account> accountList =accountRepository.findAll();
-        List<ScheduleResponseDto> result = new ArrayList<>();
+        List<ScheduleAllResponseDto.UserData> result = new ArrayList<>();
         for(Account a : accountList) {
             if(!a.getSchedules().isEmpty()) {
-                result.add(ScheduleResponseDto.from(a));
+                for(Schedule s : a.getSchedules()){
+                    result.add(new ScheduleAllResponseDto.UserData(a,s));
+                }
             }
         }
 
