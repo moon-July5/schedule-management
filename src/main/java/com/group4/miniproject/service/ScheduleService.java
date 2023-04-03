@@ -177,11 +177,11 @@ public class ScheduleService {
     }
 
     public List<ScheduleTodayResponseDTO> getTodayDuty(ScheduleTodayRequestDTO scheduleTodayRequestDTO){
-        LocalDateTime today = scheduleTodayRequestDTO.getStart_date();
+        LocalDate today = scheduleTodayRequestDTO.getStart_date();
         List<Schedule> scheduleList = scheduleRepository.findAll();
         List<Account> accountList = new ArrayList<>();
         for (Schedule i:scheduleList) {
-            if(checkToday(i.getStartDate(),i.getEndDate(),today)){
+            if(checkToday(i.getStartDate().toLocalDate(),i.getEndDate().toLocalDate(),today)){
                 if(i.getType().equals(ScheduleType.DUTY))
                 accountList.add(accountRepository.findById(i.getAccount().getId()).get());
             }
@@ -203,12 +203,10 @@ public class ScheduleService {
         }
         return resultList;
     }
-    private boolean checkToday(LocalDateTime start,LocalDateTime end,LocalDateTime today){
-        LocalDate startDate =start.toLocalDate();
-        LocalDate endDate = end.toLocalDate();
-        LocalDate today1 = today.toLocalDate();
+    private boolean checkToday(LocalDate start,LocalDate end,LocalDate today){
+
         // 시작날자  <  오늘 < 끝 or 시작=오늘 or 오늘 = 끝
-        if((startDate.isAfter(today1) && endDate.isBefore(today1))||(startDate.isEqual(today1))||(endDate.isEqual(today1))){
+        if((start.isAfter(today) && end.isBefore(today))||(start.isEqual(today))||(end.isEqual(today))){
             return true;
         }
         return false;
