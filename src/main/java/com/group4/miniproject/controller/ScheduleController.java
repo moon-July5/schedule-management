@@ -79,7 +79,7 @@ public class ScheduleController {
     }
 
 
-    @AuthCheck
+    
     @GetMapping("/today-duty")
     public ResponseEntity<?> todayDuty(@RequestBody ScheduleTodayRequestDTO scheduleTodayRequestDTO){
         return new ResponseEntity<>(scheduleService.getTodayDuty(scheduleTodayRequestDTO),HttpStatus.OK);
