@@ -213,8 +213,8 @@ public class AccountService {
     return accounts.stream().map(account -> AccountSearchInfoResponseDTO.from(account)).collect(Collectors.toList());
   }
 
-  public AccountSearchResponseDTO getAccountScheduleInfo(Long id) throws Exception {
-    Account account = accountRepository.findById(id)
+  public AccountSearchResponseDTO getAccountScheduleInfo(String name) throws Exception {
+    Account account = accountRepository.findByName(name)
             .orElseThrow(() -> new EntityNotFoundException("유효하지 않은 id 입니다."));
 
     return AccountSearchResponseDTO.from(account);

@@ -5,7 +5,6 @@ import com.group4.miniproject.config.SecurityConfig;
 import com.group4.miniproject.domain.Schedule;
 import com.group4.miniproject.domain.ScheduleType;
 import com.group4.miniproject.dto.schedule.ScheduleRequestDto;
-import com.group4.miniproject.dto.schedule.ScheduleTodayRequestDTO;
 import com.group4.miniproject.repository.ScheduleRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
