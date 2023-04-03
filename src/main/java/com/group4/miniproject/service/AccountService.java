@@ -28,10 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Log4j2
@@ -206,18 +203,21 @@ public class AccountService {
     return new ResponseDto("success","삭제완료");
     //  로그인 기능 쪽에  isdelete true면 로그인 불가 ?.
   }
-  public List<AccountSearchInfoResponseDTO> getAllUserInfo(String name) {
-    List<Account> accounts = name!=null ? accountRepository.findByNameContainingIgnoreCase(encrypt256.convertToDatabaseColumn(name)) :
-            accountRepository.findAll();
+//  public List<AccountSearchInfoResponseDTO> getAllUserInfo(String name) {
+//    List<Account> accounts = name!=null ? accountRepository.findByNameContainingIgnoreCase(encrypt256.convertToDatabaseColumn(name)) :
+//            accountRepository.findAll();
+//
+//    return accounts.stream().map(account -> AccountSearchInfoResponseDTO.from(account)).collect(Collectors.toList());
+//  }
 
-    return accounts.stream().map(account -> AccountSearchInfoResponseDTO.from(account)).collect(Collectors.toList());
-  }
+  public List<AccountSearchResponseDTO> getAccountScheduleInfo(String name) throws Exception {
+    List<Account> account = accountRepository.findByName(name);
+    List<AccountSearchResponseDTO> accountSearchResponseDTOList = new ArrayList<>();
+    for (Account a : account){
+      accountSearchResponseDTOList.add(AccountSearchResponseDTO.from(a));
+    }
 
-  public AccountSearchResponseDTO getAccountScheduleInfo(String name) throws Exception {
-    Account account = accountRepository.findByName(name)
-            .orElseThrow(() -> new EntityNotFoundException("유효하지 않은 id 입니다."));
-
-    return AccountSearchResponseDTO.from(account);
+    return accountSearchResponseDTOList;
   }
 
   public ResponseDto setAccountRole(Long id, AccountRoleRequestDTO dto){
@@ -235,12 +235,16 @@ public class AccountService {
   }
 
   // 테스트 용
-  public String register(String name, String email,String department, String position) throws Exception {
+  public String register(String name, String email,String department, String position,Long yearly) throws Exception {
+    Set<AccountRole> roles = new HashSet<>();
     Account account = Account.builder()
             .name(name)
             .email(email)
             .department(department)
             .position(position)
+            .duty(true)
+            .roles(roles)
+            .yearly(yearly)
             .build();
 
     accountRepository.save(account);
