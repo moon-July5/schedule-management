@@ -4,6 +4,7 @@ import com.group4.miniproject.domain.Account;
 import com.group4.miniproject.domain.AccountRole;
 import com.group4.miniproject.domain.Schedule;
 import com.group4.miniproject.domain.ScheduleType;
+import com.group4.miniproject.dto.account.AccountLoginRequestDto;
 import com.group4.miniproject.dto.account.AccountLoginResponseDTO;
 import lombok.*;
 
@@ -17,8 +18,70 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ScheduleAllResponseDto {
-     public List<ScheduleResponseDto> users = new ArrayList<>();
+     public List<UserData> users = new ArrayList<>();
 
+     @Getter
+     @Setter
+     public static class UserData {
+          private Long id;
+          private String name;
+
+          private String accountId;
+
+          private AccountRole role;
+
+          private String email;
+
+          private String department;
+
+          private String position;
+
+          private Long yearly;
+
+          boolean duty;
+
+          private AccountLoginResponseDTO.ScheduleData schedule;
+          public UserData(Account a,Schedule s) {
+               this.id = a.getId();
+               this.name = a.getName();
+               this.accountId = a.getAccountId();
+               this.role = a.getRoles().iterator().next();
+               this.email = a.getEmail();
+               this.department = a.getDepartment();
+               this.position = a.getPosition();
+               this.yearly = a.getYearly();
+               this.duty = a.getDuty();
+               this.schedule = new AccountLoginResponseDTO.ScheduleData(s);
+          }
+     }
+
+
+     @Getter
+     @Setter
+     public static class ScheduleData {
+          private Long id;
+          private String accountId;
+          private ScheduleType type;
+          private String content;
+          private LocalDateTime start_date;
+          private LocalDateTime end_date;
+          private LocalDateTime created_at;
+          private LocalDateTime modified_at;
+
+          public ScheduleData(Schedule s) {
+               if(s==null){
+                    return;
+               }
+               this.id = s.getId();
+               this.accountId = s.getAccount().getAccountId();
+               this.type = s.getType();
+               this.content = s.getContent();
+               this.start_date = s.getStartDate();
+               this.end_date = s.getEndDate();
+               this.created_at = s.getCreatedAt();
+               this.modified_at = s.getModifiedAt();
+          }
+     }
 
 }
 /*
