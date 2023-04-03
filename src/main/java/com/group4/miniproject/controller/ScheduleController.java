@@ -26,7 +26,7 @@ public class ScheduleController {
 
     // 전체 일정 조회
     @GetMapping("/all")
-    public ResponseEntity<?> allSchedule(){
+    public ResponseEntity<?> allSchedule() throws Exception {
         return new ResponseEntity<>(scheduleService.getAllSchedules(), HttpStatus.OK);
     }
 

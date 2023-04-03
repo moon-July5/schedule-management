@@ -31,14 +31,14 @@ public class ScheduleService {
     private final AccountRepository accountRepository;
 
     // 전체 일정 조회
-    public List<ScheduleAllResponseDto> getAllSchedules(){
-        List<Schedule> schedules = scheduleRepository.findAll();
-        List<ScheduleAllResponseDto> result = new ArrayList<>();
+    public ScheduleAllResponseDto getAllSchedules() throws Exception {
+        List<Account> accountList =accountRepository.findAll();
+        List<ScheduleResponseDto> result = new ArrayList<>();
+        for(Account a : accountList) {
+            result.add(ScheduleResponseDto.from(a));
+        }
 
-        for(Schedule s : schedules)
-            result.add(new ScheduleAllResponseDto(s));
-
-        return result;
+        return ScheduleAllResponseDto.builder().users(result).build();
     }
 
     // 개인 연차/당직 조회
