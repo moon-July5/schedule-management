@@ -1,6 +1,7 @@
 package com.group4.miniproject.service;
 
 import com.group4.miniproject.domain.Account;
+import com.group4.miniproject.domain.AccountRole;
 import com.group4.miniproject.domain.Schedule;
 import com.group4.miniproject.domain.ScheduleType;
 import com.group4.miniproject.dto.*;
@@ -19,9 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Period;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Log4j2
 @Transactional
@@ -88,11 +87,14 @@ public class ScheduleService {
         Schedule schedule = scheduleRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("일정이 존재하지 않습니다!"));
 
-        if(!schedule.getAccount().getId().equals(principalDto.getId())){
+        // 만약 다른 유저 것에 접근 시, 그리고 권한이 ROLE_ADMIN이 아닌 경우
+        if((!schedule.getAccount().getId().equals(principalDto.getId()))
+                && !accountRepository.findById(principalDto.getId()).get().getRoles().contains(AccountRole.ROLE_ADMIN)){
+
             throw new AccessDeniedException("권한이 없습니다.");
         }
 
-        Optional<Account> account = accountRepository.findById(principalDto.getId());
+        Optional<Account> account = accountRepository.findById(schedule.getAccount().getId());
 
         log.info("account = "+account);
 
@@ -150,7 +152,9 @@ public class ScheduleService {
         Schedule schedule = scheduleRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("일정이 존재하지 않습니다!"));
 
-        if(!schedule.getAccount().getId().equals(principal.getId())){
+        if((!schedule.getAccount().getId().equals(principal.getId()))
+                && !accountRepository.findById(principal.getId()).get().getRoles().contains(AccountRole.ROLE_ADMIN)){
+
             throw new AccessDeniedException("권한이 없습니다.");
         }
 
