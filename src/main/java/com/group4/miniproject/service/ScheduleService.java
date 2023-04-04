@@ -21,6 +21,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Period;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Log4j2
 @Transactional
@@ -207,7 +208,7 @@ public class ScheduleService {
 
             );
         }
-        return resultList;
+        return resultList.stream().distinct().collect(Collectors.toList());
     }
     private boolean checkToday(LocalDate start,LocalDate end,LocalDate today){
 
