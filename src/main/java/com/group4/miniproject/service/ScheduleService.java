@@ -208,7 +208,9 @@ public class ScheduleService {
 
             );
         }
-        return resultList.stream().distinct().collect(Collectors.toList());
+        Set<ScheduleTodayResponseDTO> set = new HashSet<>(resultList);
+        List<ScheduleTodayResponseDTO> result= new ArrayList<>(set);
+        return result;
     }
     private boolean checkToday(LocalDate start,LocalDate end,LocalDate today){
 
