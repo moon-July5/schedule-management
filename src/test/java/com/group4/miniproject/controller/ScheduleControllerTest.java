@@ -61,6 +61,7 @@ class ScheduleControllerTest {
     @Test
     public void saveScheduleTest1() throws Exception {
         ScheduleRequestDto request = ScheduleRequestDto.builder()
+                .id(2L)
                 .start_date(LocalDateTime.now())
                 .end_date(LocalDateTime.now().plusDays(1L))
                 .scheduleType(ScheduleType.YEARLY)

@@ -56,6 +56,7 @@ public class ScheduleService {
     // 연차/당직 등록
     public boolean saveSchedule(ScheduleRequestDto scheduleRequestDto, PrincipalDto principalDto) {
         Optional<Account> account = accountRepository.findById(principalDto.getId());
+
         log.info("account = "+account);
 
         // 타입이 일정이면
@@ -64,21 +65,50 @@ public class ScheduleService {
                 throw new IllegalArgumentException("일정 내용을 작성해 주세요!");
         }
 
-        Long yearly = account.get().getYearly() - diff(scheduleRequestDto);
-        log.info("yearly = "+yearly);
+        Long yearly = account.get().getYearly();
 
         // 타입이 연차면
         if(scheduleRequestDto.getScheduleType().getType().equals("YEARLY")){
+
+            if(accountRepository.findById(principalDto.getId()).get().getRoles().contains(AccountRole.ROLE_ADMIN)
+            && scheduleRequestDto.getId()!=null) {
+                yearly = accountRepository.findById(scheduleRequestDto.getId()).get().getYearly() - diff(scheduleRequestDto);
+                log.info("yearly = "+yearly);
+            } else {
+                yearly = account.get().getYearly() - diff(scheduleRequestDto);
+                log.info("yearly = " + yearly);
+            }
+
             if(yearly < 0){
                 throw new IllegalArgumentException("남은 연차가 없습니다!");
             }
+
+        }
+
+        if(scheduleRequestDto.getId()!=null && account.get().getRoles().contains(AccountRole.ROLE_ADMIN)){
+            Account account_ = accountRepository.findById(scheduleRequestDto.getId())
+                    .orElseThrow(() -> new EntityNotFoundException("유효하지 않은 id 입니다."));
+
+            Schedule schedule_ = scheduleRequestDto.adminToEntity(account_);
+            scheduleRepository.save(schedule_);
+
+            log.info("account yearly : "+account_.getYearly());
+
+            account_.setYearly(yearly);
+            return true;
+        }
+
+
+        if(scheduleRequestDto.getId()!=null && account.get().getRoles().contains(AccountRole.ROLE_USER)) {
+            throw new IllegalArgumentException("잘못된 요청입니다.");
         }
 
         Schedule schedule = scheduleRequestDto.toEntity(principalDto);
         scheduleRepository.save(schedule);
-        account.get().setYearly(yearly);
 
         log.info("account yearly : "+account.get().getYearly());
+
+        account.get().setYearly(yearly);
 
         return true;
     }
@@ -106,24 +136,27 @@ public class ScheduleService {
                 throw new IllegalArgumentException("일정 내용을 작성해 주세요!");
         }
 
-        // 수정하기 전 날짜 차이
-        int prevDiff = Period.between(schedule.getStartDate().toLocalDate(),
-                schedule.getEndDate().toLocalDate()).getDays()+1;
-
-        log.info("prevDiff = "+prevDiff);
-        // 수정한 후 날짜 차이
-        int currentDiff = diff(scheduleRequestDto);
-        log.info("currentDiff = "+currentDiff);
-
-        Long yearly = account.get().getYearly() + (prevDiff - currentDiff);
-
-        log.info("yearly = "+yearly);
-
         // 타입이 연차면
         if(scheduleRequestDto.getScheduleType().getType().equals("YEARLY")){
+            // 수정하기 전 날짜 차이
+            int prevDiff = Period.between(schedule.getStartDate().toLocalDate(),
+                    schedule.getEndDate().toLocalDate()).getDays()+1;
+
+            log.info("prevDiff = "+prevDiff);
+            // 수정한 후 날짜 차이
+            int currentDiff = diff(scheduleRequestDto);
+            log.info("currentDiff = "+currentDiff);
+
+            Long yearly = account.get().getYearly() + (prevDiff - currentDiff);
+
+            log.info("yearly = "+yearly);
+
             if(yearly < 0){
                 throw new IllegalArgumentException("남은 연차가 없습니다!");
             }
+
+            account.get().setYearly(yearly);
+
         }
 
         if(!schedule.getStartDate().equals(scheduleRequestDto.getStart_date())){
@@ -139,8 +172,6 @@ public class ScheduleService {
                 schedule.setContent(scheduleRequestDto.getContent());
             }
         }
-
-        account.get().setYearly(yearly);
 
         log.info("account yearly : "+account.get().getYearly());
 

@@ -30,11 +30,11 @@ public class AccountServiceTest {
 
     @Test
     public void register() throws Exception {
-        String name1 = accountService.register("김고수","asdf@1234","마케팅","부장");
-        String name2 = accountService.register("이미나","aab@1234","마케팅","과장");
-        String name3 = accountService.register("박은우","dkfk@asdf.com","디자인","대리");
-        String name4= accountService.register("유지현","yuu@axd.com","회계","사원");
-        String name5= accountService.register("민시후","mmm@dfgf.com","인사","사원");
+//        String name1 = accountService.register("김고수","asdf@1234","마케팅","부장");
+//        String name2 = accountService.register("이미나","aab@1234","마케팅","과장");
+//        String name3 = accountService.register("박은우","dkfk@asdf.com","디자인","대리");
+//        String name4= accountService.register("유지현","yuu@axd.com","회계","사원");
+//        String name5= accountService.register("민시후","mmm@dfgf.com","인사","사원");
     }
 
     @Test

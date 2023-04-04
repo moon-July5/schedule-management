@@ -35,7 +35,7 @@ public class AccountControllerTest {
     @DisplayName("회원 권한 변경")
     @Test
     public void SetAccountRoleTest1() throws Exception {
-        AccountRoleRequestDTO dto = AccountRoleRequestDTO.builder().role(AccountRole.ROLE_USER).build();
+        AccountRoleRequestDTO dto = AccountRoleRequestDTO.builder().role(String.valueOf(AccountRole.ROLE_USER)).build();
 
         mvc.perform(post("/account/admin/role/2")
                         .contentType(MediaType.APPLICATION_JSON)

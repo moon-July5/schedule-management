@@ -1,5 +1,6 @@
 package com.group4.miniproject.dto.schedule;
 
+import com.group4.miniproject.domain.Account;
 import com.group4.miniproject.domain.Schedule;
 import com.group4.miniproject.domain.ScheduleType;
 import com.group4.miniproject.dto.PrincipalDto;
@@ -17,6 +18,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ScheduleRequestDto {
+    private Long id;
     @NotNull(message = "날짜를 선택해 주세요.")
     private LocalDateTime start_date;
 
@@ -36,5 +38,15 @@ public class ScheduleRequestDto {
                 .account(dto.toEntity())
                 .build();
 
+    }
+
+    public Schedule adminToEntity(Account account) {
+        return Schedule.builder()
+                .startDate(start_date)
+                .endDate(end_date)
+                .type(scheduleType)
+                .content(content)
+                .account(Account.builder().id(id).build())
+                .build();
     }
 }
