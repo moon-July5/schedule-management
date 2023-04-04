@@ -225,7 +225,7 @@ public class AccountService {
             .orElseThrow(() -> new EntityNotFoundException("유효하지 않은 id 입니다."));
 
     Set<AccountRole> roles = new HashSet<>();
-    roles.add(dto.getRole());
+    roles.add(dto.stringToEnum());
 
     account.setRoles(roles);
 

@@ -11,5 +11,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Getter
 public class AccountRoleRequestDTO {
-    private AccountRole role;
+    private String role;
+
+    public AccountRole stringToEnum(){
+        return AccountRole.valueOf(this.role);
+    }
 }
