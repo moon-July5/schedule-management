@@ -41,6 +41,16 @@
 
 <br>
 
+## 6. Architecture
+<details>
+<summary>Architecture 이미지</summary>
+
+![image](https://github.com/moon-July5/schedule-management/assets/60730405/fcc90af3-fcaf-4e5c-9d7a-3ed6271e57d5)
+
+</details>  
+
+<br>
+
 ## 6. 핵심 기능
 이 프로젝트는 연차/당직을 관리하는 서비스를 제공하고 있기 때문에 핵심 기능은 **연차/당직을 등록, 조회, 수정, 삭제**하는 기능입니다.
 
